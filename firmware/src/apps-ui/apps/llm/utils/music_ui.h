@@ -35,6 +35,6 @@ void music_ui_list_confirm(void);
 void music_ui_show_list(const voice_msg_music_list_t *list);
 
 /** 设置封面（LVGL 内存图片源：RGB565 + 8 字节头） */
-void music_ui_set_cover(const uint8_t *data, uint32_t len);
+void music_ui_set_cover(void *data, uint32_t len);
 
 #endif /* __MUSIC_UI_H__ */

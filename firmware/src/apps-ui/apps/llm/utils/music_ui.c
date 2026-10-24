@@ -19,7 +19,6 @@
 #include "lvgl.h"
 #include "voice_player_music.h"
 #include "voice_msg.h"
-#include "lisa_ui.h"
 #include "sys_init.h"
 
 #define TAG "music_ui"
@@ -135,10 +134,9 @@ static void refresh_cb(lv_timer_t *timer)
 }
 
 static lv_img_dsc_t s_cover_dsc;
-static uint8_t *s_cover_buf;   /* PSRAM 里分配，静态区放不下 8KB */
 
-/* 收到 CP 侧推来的封面（RGB565 + 8 字节头），直接当内存图片源 */
-void music_ui_set_cover(const uint8_t *data, uint32_t len)
+/* 收到 CP 侧推来的封面引用（PSRAM 指针，双核共享，直接当内存图片源） */
+void music_ui_set_cover(void *data, uint32_t len)
 {
     uint32_t dsize = 0;
 
@@ -149,18 +147,10 @@ void music_ui_set_cover(const uint8_t *data, uint32_t len)
         return;
     }
 
-    if (s_cover_buf == NULL) {
-        s_cover_buf = lisa_ui_malloc(VOICE_MSG_MUSIC_COVER_SIZE);
-        if (s_cover_buf == NULL) {
-            return;
-        }
-    }
-
-    memcpy(s_cover_buf, data, len);
-    memcpy(&s_cover_dsc.header, s_cover_buf, sizeof(s_cover_dsc.header));
-    memcpy(&dsize, s_cover_buf + 4, 4);
+    memcpy(&s_cover_dsc.header, data, sizeof(s_cover_dsc.header));
+    memcpy(&dsize, (uint8_t *)data + 4, 4);
     s_cover_dsc.data_size = dsize;
-    s_cover_dsc.data = s_cover_buf + 8;
+    s_cover_dsc.data = (const uint8_t *)data + 8;
 
     lv_img_set_src(s_cover, &s_cover_dsc);
     LOGI("cover shown %ux%u", (unsigned)s_cover_dsc.header.w, (unsigned)s_cover_dsc.header.h);
@@ -169,14 +159,16 @@ void music_ui_set_cover(const uint8_t *data, uint32_t len)
 static void music_on_cover(void *unused, uint32_t msg_id, void *data,
                            uint32_t len, void *user_data)
 {
+    const voice_msg_music_cover_t *ref = data;
+
     (void)unused;
     (void)msg_id;
     (void)user_data;
 
-    if (data == NULL || len < sizeof(voice_msg_music_cover_t)) {
+    if (ref == NULL || len < sizeof(*ref)) {
         return;
     }
-    music_ui_set_cover((const uint8_t *)data, len);
+    music_ui_set_cover(ref->data, ref->len);
 }
 
 void music_ui_init(lv_obj_t *parent)

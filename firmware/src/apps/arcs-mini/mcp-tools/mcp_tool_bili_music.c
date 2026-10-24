@@ -366,11 +366,16 @@ cJSON *bili_music_search_entry(const char *name, cJSON *args)
 }
 
 
-/* 下载封面（RGB565 内存图片源）并推给 UI */
+/* 下载封面（RGB565 内存图片源）并推给 UI。
+ * 数据放 PSRAM 且只传指针：ebus pub 会 platform_malloc 拷贝 payload，
+ * SRAM 已用到 99%，8KB 必然 ENOMEM。 */
+static uint8_t *s_cover_mem;
+
 static void bili_push_cover(const char *cover_url)
 {
     http_acc_t acc = {0};
-    voice_msg_music_cover_t *cov;
+    voice_msg_music_cover_t ref;
+    uint8_t *buf;
 
     if (cover_url == NULL || cover_url[0] == 0) {
         return;
@@ -404,17 +409,23 @@ static void bili_push_cover(const char *cover_url)
         return;
     }
 
-    cov = lisa_mem_calloc(1, sizeof(*cov));
-    if (cov == NULL) {
+    buf = psram_malloc(acc.len);
+    if (buf == NULL) {
         psram_free(acc.buf);
         return;
     }
-    memcpy(cov->data, acc.buf, acc.len);
+    memcpy(buf, acc.buf, acc.len);
     psram_free(acc.buf);
 
-    LOGI("cover %u bytes", (unsigned)acc.len);
-    voice_msg_pub(VOICE_MSG_APP_MUSIC_COVER, cov, sizeof(*cov));
-    lisa_mem_free(cov);
+    if (s_cover_mem != NULL) {
+        psram_free(s_cover_mem);      /* 释放上一首的封面 */
+    }
+    s_cover_mem = buf;
+
+    ref.data = buf;
+    ref.len = acc.len;
+    LOGI("cover %u bytes -> ui", (unsigned)acc.len);
+    voice_msg_pub(VOICE_MSG_APP_MUSIC_COVER, &ref, sizeof(ref));
 }
 
 /* UI 双击选定后：按 bvid 点播 */

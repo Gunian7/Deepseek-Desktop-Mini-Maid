@@ -21,6 +21,7 @@
 #include "lisa_http.h"
 #include "mcp.h"
 #include "voice_msg.h"
+#include "async_task.h"
 #include "sys_init.h"
 #include "sysheap.h"
 
@@ -408,30 +409,238 @@ static void bili_select_handler(void *unused, uint32_t msg_id, void *data,
     cJSON_Delete(root);
 }
 
+/* ==================== 端侧意图拦截：ASR → 直接搜索 ==================== */
+
+/*
+ * 为什么要绕过 LLM：
+ * 云端 LLM 只对自己知识库里的标准歌名（如「晴天」）调音乐工具，
+ * 遇到「司凤音乐」「寂寞先生」这类说法会直接回「曲库没有」/「不支持播放」，
+ * 同一句话这次调下次不调，不可控。所以在这里拦 ASR 结果：
+ * 命中「播放/来首/听」就自己搜，不依赖云端判断。
+ */
+
+static char s_iat_text[160];
+
+static void bili_extract_song(const char *text, char *out, size_t n)
+{
+    static const char *kws[] = {
+        "播放一首", "播放一首歌", "播放歌曲", "播放", "放一首", "放首",
+        "来一首", "来首", "我想听", "想听", "听一首", "听一下", "听",
+    };
+    const char *p = NULL;
+    size_t i;
+
+    out[0] = '\0';
+    for (i = 0; i < sizeof(kws) / sizeof(kws[0]); i++) {
+        const char *q = strstr(text, kws[i]);
+        if (q) {
+            p = q + strlen(kws[i]);
+            break;
+        }
+    }
+    if (p == NULL) {
+        return;
+    }
+
+    /* 跳过前导空格和「的」（UTF-8: E7 9A 84） */
+    while (*p == ' ') {
+        p++;
+    }
+    if ((unsigned char)p[0] == 0xe7 && (unsigned char)p[1] == 0x9a &&
+        (unsigned char)p[2] == 0x84) {
+        p += 3;
+    }
+
+    i = 0;
+    while (*p && i + 1 < n && *p != '.' && *p != '\n' && *p != ' ' &&
+           *p != ',' && *p != '!' && *p != '?') {
+        out[i++] = *p++;
+    }
+    out[i] = '\0';
+
+    /* 去掉末尾的一个中文标点（UTF-8 3 字节）。
+     * 注意：中文字符首字节同样 >= 0xe3，所以必须逐个字节比对具体标点，
+     * 不能用 >= 判断，否则会把整个歌名删空。 */
+    if (i >= 3) {
+        unsigned char c0 = (unsigned char)out[i - 3];
+        unsigned char c1 = (unsigned char)out[i - 2];
+        bool is_punct =
+            (c0 == 0xe3 && c1 == 0x80) ||          /* 。 */
+            (c0 == 0xef && c1 == 0xbc) ||          /* ，！？ */
+            (c0 == 0xe2 && c1 == 0x80);            /* " */
+        if (is_punct) {
+            i -= 3;
+            out[i] = '\0';
+        }
+    }
+}
+
+static void bili_search_and_push(const char *song)
+{
+    char *encoded;
+    char url[URL_MAX_LENGTH];
+    cJSON *root;
+    const cJSON *ok;
+    const cJSON *items;
+    int i;
+    int n;
+
+    if (song[0] == '\0') {
+        return;
+    }
+
+    encoded = psram_malloc(256);
+    if (encoded == NULL) {
+        return;
+    }
+    url_encode(song, encoded, 256);
+    snprintf(url, sizeof(url), "http://" BILI_SERVICE_HOST ":%d/search?q=%s&n=%d",
+             BILI_SERVICE_PORT, encoded, VOICE_MSG_MUSIC_LIST_MAX);
+    psram_free(encoded);
+
+    LOGI("iat search: %s", song);
+    root = bili_get_json(url, RESP_MAX);
+    if (root == NULL) {
+        LOGW("iat search failed: no service");
+        return;
+    }
+
+    ok = cJSON_GetObjectItem(root, "ok");
+    items = cJSON_GetObjectItem(root, "items");
+    if (!cJSON_IsTrue(ok) || !cJSON_IsArray(items)) {
+        cJSON_Delete(root);
+        return;
+    }
+
+    memset(&g_list, 0, sizeof(g_list));
+    n = cJSON_GetArraySize(items);
+    if (n > VOICE_MSG_MUSIC_LIST_MAX) {
+        n = VOICE_MSG_MUSIC_LIST_MAX;
+    }
+    for (i = 0; i < n; i++) {
+        const cJSON *it = cJSON_GetArrayItem(items, i);
+        const cJSON *jt = cJSON_GetObjectItem(it, "title");
+        const cJSON *jb = cJSON_GetObjectItem(it, "bvid");
+
+        if (!cJSON_IsString(jt) || !cJSON_IsString(jb)) {
+            continue;
+        }
+        snprintf(g_list.title[g_list.count], VOICE_MSG_MUSIC_TITLE_LEN, "%s", jt->valuestring);
+        snprintf(g_list.bvid[g_list.count], VOICE_MSG_MUSIC_BVID_LEN, "%s", jb->valuestring);
+        g_list.count++;
+    }
+    cJSON_Delete(root);
+
+    if (g_list.count > 0) {
+        LOGI("iat list: %d tracks", g_list.count);
+        voice_msg_pub(VOICE_MSG_APP_MUSIC_LIST_SHOW, &g_list, sizeof(g_list));
+    } else {
+        LOGW("iat list empty");
+    }
+}
+
+/* 搜索必须放在独立线程：ebus 回调里做同步 HTTP 会阻塞整个事件总线
+ * （一次搜索 1~8 秒），表现为界面卡死、语音无响应。 */
+struct bili_search_job {
+    char song[128];
+};
+
+static void bili_search_worker(void *user_data, bool *should_stop)
+{
+    struct bili_search_job *job = user_data;
+
+    (void)should_stop;
+    if (job != NULL) {
+        bili_search_and_push(job->song);
+    }
+}
+
+static void bili_search_complete(void *user_data, bool completed, bool interrupted)
+{
+    (void)completed;
+    (void)interrupted;
+
+    if (user_data != NULL) {
+        lisa_mem_free(user_data);
+    }
+}
+
+static void bili_search_async(const char *song)
+{
+    struct bili_search_job *job;
+    async_task_t *task;
+
+    if (song == NULL || song[0] == 0) {
+        return;
+    }
+
+    job = lisa_mem_calloc(1, sizeof(*job));
+    if (job == NULL) {
+        return;
+    }
+    snprintf(job->song, sizeof(job->song), "%s", song);
+
+    task = async_task_create("bili_search", 4096, 5,
+                             bili_search_worker, bili_search_complete, job);
+    if (task == NULL) {
+        lisa_mem_free(job);
+        return;
+    }
+    if (async_task_start(task) != 0) {
+        async_task_destroy(task);
+        lisa_mem_free(job);
+    }
+}
+
+static void bili_on_iat_update(void *unused, uint32_t msg_id, void *data,
+                               uint32_t len, void *user_data)
+{
+    char *p = data;
+
+    (void)unused;
+    (void)msg_id;
+    (void)user_data;
+
+    if (p == NULL || len == 0 || p[0] == '\0') {
+        return;
+    }
+    if (len > sizeof(s_iat_text) - 1) {
+        len = sizeof(s_iat_text) - 1;
+    }
+    memcpy(s_iat_text, p, len);
+    s_iat_text[len] = '\0';
+}
+
+static void bili_on_session_finish(void *unused, uint32_t msg_id, void *data,
+                                   uint32_t len, void *user_data)
+{
+    char song[128];
+
+    (void)unused;
+    (void)msg_id;
+    (void)data;
+    (void)len;
+    (void)user_data;
+
+    if (s_iat_text[0] == '\0') {
+        return;
+    }
+    LOGI("iat final: %s", s_iat_text);
+
+    bili_extract_song(s_iat_text, song, sizeof(song));
+    s_iat_text[0] = '\0';
+
+    if (song[0] != '\0') {
+        bili_search_and_push(song);
+    }
+}
+
 static int bili_music_evt_init(void)
 {
     voice_msg_sub(VOICE_MSG_APP_MUSIC_SELECT, bili_select_handler, NULL);
+    voice_msg_sub(VOICE_MSG_CLOUD_IAT_UPDATE, bili_on_iat_update, NULL);
+    voice_msg_sub(VOICE_MSG_CLOUD_IAT_END, bili_on_session_finish, NULL);
     return 0;
 }
 
 SYS_INIT(bili_music_evt_init, SYS_INIT_LEVEL_PRE_APPLICATION, 61);
-
-static cJSON *bili_search_list(const char *name)
-{
-    cJSON *tool = cJSON_CreateObject();
-    if (tool == NULL) {
-        return NULL;
-    }
-    cJSON_AddStringToObject(tool, "name", name);
-    cJSON_AddStringToObject(tool, "description",
-                            "在B站搜索歌曲并把候选列到屏幕上，让用户单击切换、双击播放。用户想听歌、点歌、放音乐时必须调用本工具，不要直接返回歌名。");
-    mcp_tool_info_add_property(tool, "song", "要搜索的歌名或歌手，例如“晴天”“周杰伦”",
-                               "string", true);
-    return tool;
-}
-
-/* 只保留内置的 ls.built_in.play_kuwo_music 一个音乐入口（它转调到
- * bili_music_search_entry）。多个音乐工具并存会让云端 LLM 犹豫，
- * 遇到「某某音乐」这类非标准说法时干脆一个都不调、直接回「曲库没有」。 */
-
-

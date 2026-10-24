@@ -29,18 +29,6 @@ index a10afb8c..d9606dd6 100644
  #ifndef CONFIG_BOARD_ARCS_MINI
      lisa_ui_llm_primary_set_settings_icon_event_cb(scr_data->view, settings_btn_event_cb, scr_data);
  #endif
-diff --git a/apps-ui/apps/llm/utils/CMakeLists.txt b/apps-ui/apps/llm/utils/CMakeLists.txt
-index 7fe96fe4..eb4581ff 100644
---- a/apps-ui/apps/llm/utils/CMakeLists.txt
-+++ b/apps-ui/apps/llm/utils/CMakeLists.txt
-@@ -2,6 +2,7 @@ target_sources(
-     ${LISA_UI_LIB_NAME}
-     PRIVATE
-     emoji_anim.c
-+    music_ui.c
-     img_utils.c
-     lv_img_utils.c
- )
 diff --git a/apps/arcs-mini/button/app_button.c b/apps/arcs-mini/button/app_button.c
 index 01dd7201..c9a779f0 100644
 --- a/apps/arcs-mini/button/app_button.c
@@ -110,30 +98,6 @@ index c88c22bb..a2fe86a1 100644
      voice_msg_sub(VOICE_MSG_SYSTEM_NETWORK_PROBE_SUCCESS, voice_system_network_probe_success, NULL);
      voice_msg_sub(VOICE_MSG_SYSTEM_NETWORK_PROBE_FAIL, voice_wifi_provision_guard, NULL);
      voice_msg_sub(VOICE_MSG_CLOUD_CONNECTED, voice_cloud_connected, NULL);
-diff --git a/apps/arcs-mini/mcp-tools/CMakeLists.txt b/apps/arcs-mini/mcp-tools/CMakeLists.txt
-index d2589244..f90c2e4b 100644
---- a/apps/arcs-mini/mcp-tools/CMakeLists.txt
-+++ b/apps/arcs-mini/mcp-tools/CMakeLists.txt
-@@ -11,6 +11,7 @@ listenai_library_sources(
-     mcp_tool_image.c
-     mcp_tool_duplex.c
-     mcp_tool_sd_music.c
-+    mcp_tool_bili_music.c
- )
- 
- if(CONFIG_LOG_UPLOAD)
-diff --git a/apps/arcs-mini/services/CMakeLists.txt b/apps/arcs-mini/services/CMakeLists.txt
-index f4c2abbd..5c957f02 100644
---- a/apps/arcs-mini/services/CMakeLists.txt
-+++ b/apps/arcs-mini/services/CMakeLists.txt
-@@ -9,6 +9,7 @@ listenai_library_sources(
-     service_image.c
-     service_sd_music.c
-     service_power_policy.c
-+    service_mood.c
- )
- 
- listenai_include_directories(
 diff --git a/apps/arcs-mini/voice_player/voice_player_music.c b/apps/arcs-mini/voice_player/voice_player_music.c
 index 570e082f..b5573b5f 100644
 --- a/apps/arcs-mini/voice_player/voice_player_music.c
@@ -286,7 +250,7 @@ index 2053d075..06ea3909 100644
 +
  #endif
 diff --git a/src/server/lschat_server/mcp_tool_kuwo_music.c b/src/server/lschat_server/mcp_tool_kuwo_music.c
-index 7d739248..5b9b66a1 100644
+index 7d739248..5ec5e1a1 100644
 --- a/src/server/lschat_server/mcp_tool_kuwo_music.c
 +++ b/src/server/lschat_server/mcp_tool_kuwo_music.c
 @@ -41,22 +41,18 @@ static cJSON *ls_play_kuwo_music_items_create(void)
@@ -348,6 +312,7 @@ index 7d739248..5b9b66a1 100644
      return ls_play_kuwo_music_result(name, "已提交播放请求", false);
  }
  
-+/* 保留内置工具名（云端 LLM 只认这个名字当音乐入口），
-+ * 但 call 已转发到 B 站搜索 —— 见上面的 ls_play_kuwo_music_call。 */
- MCP_TOOL_DEFINE(ls.built_in.play_kuwo_music, ls_play_kuwo_music_list, ls_play_kuwo_music_call);
+-MCP_TOOL_DEFINE(ls.built_in.play_kuwo_music, ls_play_kuwo_music_list, ls_play_kuwo_music_call);
++/* 不注册内置酷我：实测它带 ls.built_in. 前缀时云端不会走 tools/call，
++ * 而且「曲库」话术会盖掉我们的工具。音乐入口统一用 play_bili_music。 */
++/* MCP_TOOL_DEFINE(ls.built_in.play_kuwo_music, ls_play_kuwo_music_list, ls_play_kuwo_music_call); */

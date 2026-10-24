@@ -700,7 +700,14 @@ static void bili_on_session_finish(void *unused, uint32_t msg_id, void *data,
     s_iat_text[0] = '\0';
 
     if (song[0] != '\0') {
-        bili_search_and_push(song);
+        /* 点歌意图由端侧接管：先掐掉云端这轮会话，否则 LLM 会按自己的判断
+         * 回一句「无法播放音乐」/「曲库里没有」，出现「音乐在放但她说不支持」
+         * 这种心口不一的情况。 */
+        LOGI("iat music intent, interrupt cloud reply");
+        voice_msg_pub(VOICE_MSG_CLOUD_SESSION_INTERRUPT, NULL, 0);
+        voice_msg_pub(VOICE_MSG_CLOUD_MCP_CHAT_EXIT, NULL, 0);
+
+        bili_search_async(song);
     }
 }
 

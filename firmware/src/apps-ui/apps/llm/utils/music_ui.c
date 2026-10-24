@@ -19,6 +19,7 @@
 #include "lvgl.h"
 #include "voice_player_music.h"
 #include "voice_msg.h"
+#include "lisa_ui.h"
 #include "sys_init.h"
 
 #define TAG "music_ui"
@@ -33,6 +34,7 @@ static lv_obj_t *s_root;
 static lv_obj_t *s_title;
 static lv_obj_t *s_time;
 static lv_obj_t *s_bar;
+static lv_obj_t *s_cover;
 static lv_timer_t *s_timer;
 static uint8_t s_full;          /* 0 = 窄条, 1 = 全屏 */
 static uint8_t s_visible;
@@ -59,6 +61,8 @@ static void apply_layout(void)
         lv_obj_set_size(s_title, SCREEN_W - 24, 90);
         lv_obj_set_pos(s_title, 12, 46);
         lv_obj_set_style_text_align(s_title, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN);
+        lv_obj_clear_flag(s_title, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_clear_flag(s_cover, LV_OBJ_FLAG_HIDDEN);
 
         lv_obj_set_size(s_bar, SCREEN_W - 40, 8);
         lv_obj_set_pos(s_bar, 20, 146);
@@ -71,9 +75,9 @@ static void apply_layout(void)
         lv_obj_set_pos(s_root, (SCREEN_W - 200) / 2, SCREEN_H - BAR_H - 2);
         lv_obj_set_style_bg_opa(s_root, (lv_opa_t)180, LV_PART_MAIN);
 
-        lv_obj_set_size(s_title, 128, 16);
-        lv_obj_set_pos(s_title, 4, 2);
-        lv_obj_set_style_text_align(s_title, LV_TEXT_ALIGN_LEFT, LV_PART_MAIN);
+        /* 窄条不显示歌名：表情界面本身已经有标题，两处会重复 */
+        lv_obj_add_flag(s_title, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(s_cover, LV_OBJ_FLAG_HIDDEN);
 
         lv_obj_set_size(s_bar, 192, 3);
         lv_obj_set_pos(s_bar, 4, 21);
@@ -130,6 +134,51 @@ static void refresh_cb(lv_timer_t *timer)
     lv_label_set_text(s_time, buf);
 }
 
+static lv_img_dsc_t s_cover_dsc;
+static uint8_t *s_cover_buf;   /* PSRAM 里分配，静态区放不下 8KB */
+
+/* 收到 CP 侧推来的封面（RGB565 + 8 字节头），直接当内存图片源 */
+void music_ui_set_cover(const uint8_t *data, uint32_t len)
+{
+    uint32_t dsize = 0;
+
+    if (data == NULL || len < 8 || len > VOICE_MSG_MUSIC_COVER_SIZE) {
+        return;
+    }
+    if (s_cover == NULL) {
+        return;
+    }
+
+    if (s_cover_buf == NULL) {
+        s_cover_buf = lisa_ui_malloc(VOICE_MSG_MUSIC_COVER_SIZE);
+        if (s_cover_buf == NULL) {
+            return;
+        }
+    }
+
+    memcpy(s_cover_buf, data, len);
+    memcpy(&s_cover_dsc.header, s_cover_buf, sizeof(s_cover_dsc.header));
+    memcpy(&dsize, s_cover_buf + 4, 4);
+    s_cover_dsc.data_size = dsize;
+    s_cover_dsc.data = s_cover_buf + 8;
+
+    lv_img_set_src(s_cover, &s_cover_dsc);
+    LOGI("cover shown %ux%u", (unsigned)s_cover_dsc.header.w, (unsigned)s_cover_dsc.header.h);
+}
+
+static void music_on_cover(void *unused, uint32_t msg_id, void *data,
+                           uint32_t len, void *user_data)
+{
+    (void)unused;
+    (void)msg_id;
+    (void)user_data;
+
+    if (data == NULL || len < sizeof(voice_msg_music_cover_t)) {
+        return;
+    }
+    music_ui_set_cover((const uint8_t *)data, len);
+}
+
 void music_ui_init(lv_obj_t *parent)
 {
     if (parent == NULL || s_root != NULL) {
@@ -156,6 +205,12 @@ void music_ui_init(lv_obj_t *parent)
     lv_obj_set_style_text_font(s_time, &lv_font_chinese_16, LV_PART_MAIN);
     lv_obj_set_style_text_color(s_time, lv_color_hex(0xb8c4d8), LV_PART_MAIN);
     lv_label_set_text(s_time, "");
+
+    s_cover = lv_img_create(s_root);
+    lv_obj_add_flag(s_cover, LV_OBJ_FLAG_IGNORE_LAYOUT);
+    lv_obj_set_size(s_cover, 64, 64);
+    lv_obj_set_pos(s_cover, (SCREEN_W - 64) / 2, 8);
+    lv_obj_add_flag(s_cover, LV_OBJ_FLAG_HIDDEN);
 
     s_bar = lv_bar_create(s_root);
     lv_obj_set_style_bg_color(s_bar, lv_color_hex(0x2a3342), LV_PART_MAIN);
@@ -341,6 +396,7 @@ static void music_on_list_show(void *unused, uint32_t msg_id, void *data,
 static int music_ui_evt_init(void)
 {
     voice_msg_sub(VOICE_MSG_APP_MUSIC_LIST_SHOW, music_on_list_show, NULL);
+    voice_msg_sub(VOICE_MSG_APP_MUSIC_COVER, music_on_cover, NULL);
     return 0;
 }
 

@@ -365,6 +365,58 @@ cJSON *bili_music_search_entry(const char *name, cJSON *args)
     return bili_search_impl(NULL, name, args);
 }
 
+
+/* 下载封面（RGB565 内存图片源）并推给 UI */
+static void bili_push_cover(const char *cover_url)
+{
+    http_acc_t acc = {0};
+    voice_msg_music_cover_t *cov;
+
+    if (cover_url == NULL || cover_url[0] == 0) {
+        return;
+    }
+
+    acc.cap = VOICE_MSG_MUSIC_COVER_SIZE + 1024;
+    acc.buf = psram_malloc(acc.cap);
+    if (acc.buf == NULL) {
+        return;
+    }
+    acc.buf[0] = 0;
+
+    lisa_http_request_t req = {0};
+    req.method = LISA_HTTP_GET;
+    req.url = (uint8_t *)cover_url;
+    req.timeout = 20000;
+    req.user = &acc;
+    req.on_data = on_http_data;
+
+    lisa_http_t *ins = lisa_http_init(&req);
+    if (ins == NULL) {
+        psram_free(acc.buf);
+        return;
+    }
+    lisa_http_err_e err = lisa_http_perform(ins);
+    lisa_http_cleanup(ins);
+
+    if (err != LISA_HTTP_OK || acc.len < 8 || acc.len > VOICE_MSG_MUSIC_COVER_SIZE) {
+        LOGW("cover http failed: err=%d len=%u", (int)err, (unsigned)acc.len);
+        psram_free(acc.buf);
+        return;
+    }
+
+    cov = lisa_mem_calloc(1, sizeof(*cov));
+    if (cov == NULL) {
+        psram_free(acc.buf);
+        return;
+    }
+    memcpy(cov->data, acc.buf, acc.len);
+    psram_free(acc.buf);
+
+    LOGI("cover %u bytes", (unsigned)acc.len);
+    voice_msg_pub(VOICE_MSG_APP_MUSIC_COVER, cov, sizeof(*cov));
+    lisa_mem_free(cov);
+}
+
 /* UI 双击选定后：按 bvid 点播 */
 static void bili_select_handler(void *unused, uint32_t msg_id, void *data,
                                 uint32_t len, void *user_data)
@@ -375,6 +427,7 @@ static void bili_select_handler(void *unused, uint32_t msg_id, void *data,
     const cJSON *ok;
     const cJSON *jurl;
     const cJSON *jtitle;
+    const cJSON *jcover;
 
     (void)unused;
     (void)msg_id;
@@ -402,6 +455,11 @@ static void bili_select_handler(void *unused, uint32_t msg_id, void *data,
     if (!cJSON_IsTrue(ok) || !cJSON_IsString(jurl) || jurl->valuestring == NULL) {
         cJSON_Delete(root);
         return;
+    }
+
+    jcover = cJSON_GetObjectItem(root, "cover");
+    if (cJSON_IsString(jcover) && jcover->valuestring != NULL) {
+        bili_push_cover(jcover->valuestring);
     }
 
     bili_start_playback(cJSON_IsString(jtitle) ? jtitle->valuestring : g_list.title[sel->index],

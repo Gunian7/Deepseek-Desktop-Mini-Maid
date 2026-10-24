@@ -93,7 +93,8 @@ def wbi_sign(params):
     p["wts"] = int(time.time())
     p = dict(sorted(p.items()))
     p = {k: "".join(c for c in str(v) if c not in "!'()*") for k, v in p.items()}
-    query = urllib.parse.urlencode(p)
+    # 必须用 %20 而不是 +；空格被编码成 + 时 B 站搜索返回空结果（实测）
+    query = urllib.parse.urlencode(p, quote_via=urllib.parse.quote)
     p["w_rid"] = hashlib.md5((query + mk).encode()).hexdigest()
     return urllib.parse.urlencode(p)
 
@@ -102,7 +103,29 @@ def clean_title(t):
     return re.sub(r"<[^>]+>", "", t or "").strip()
 
 
+def _kw_variants(keyword):
+    """LLM 常把「歌手 + 歌名」拼成一个带空格的查询，整串搜不到时拆开重试。"""
+    kw = (keyword or "").strip()
+    out = [kw]
+    parts = [x for x in kw.replace("　", " ").split(" ") if x]
+    if len(parts) > 1:
+        out.append(" ".join(reversed(parts)))   # 歌名 歌手
+        out.extend(reversed(parts))             # 歌名 / 歌手 单独
+    seen = set()
+    return [x for x in out if x and not (x in seen or seen.add(x))]
+
+
 def search_videos(keyword, limit=5):
+    for kw in _kw_variants(keyword):
+        r = _search_once(kw, limit)
+        if r:
+            if kw != keyword:
+                print(f"[search] '{keyword}' 整串为空，改用 '{kw}' 命中 {len(r)} 条", flush=True)
+            return r
+    return []
+
+
+def _search_once(keyword, limit=5):
     refresh_credentials()
     url = ("https://api.bilibili.com/x/web-interface/wbi/search/type?"
            + wbi_sign({"search_type": "video", "keyword": keyword}))
@@ -123,6 +146,7 @@ def search_videos(keyword, limit=5):
         out.append({
             "title": clean_title(r.get("title")),
             "bvid": r.get("bvid"),
+            "pic": r.get("pic", ""),
             "author": r.get("author"),
             "duration": secs,
         })
@@ -134,7 +158,8 @@ def audio_url(bvid):
     d = json.loads(http_get(f"https://api.bilibili.com/x/player/pagelist?bvid={bvid}"))
     cid = d["data"][0]["cid"]
     url = ("https://api.bilibili.com/x/player/wbi/playurl?"
-           + wbi_sign({"bvid": bvid, "cid": cid, "fnval": 16, "fourk": 1}))
+           + wbi_sign({"bvid": bvid,
+        "pic": "", "cid": cid, "fnval": 16, "fourk": 1}))
     d = json.loads(http_get(url))
     if d.get("code") != 0:
         raise RuntimeError(f"playurl code={d.get('code')} {d.get('message')}")
@@ -197,7 +222,50 @@ def video_info(bvid):
         "author": (v.get("owner") or {}).get("name", ""),
         "duration": v.get("duration", 0),
         "bvid": bvid,
+        "pic": v.get("pic", ""),
     }
+
+
+COVER_W = 64
+COVER_H = 64
+_cover_cache = {}          # bvid -> bytes
+
+
+def get_cover(bvid, pic):
+    """把 B 站封面转成 LVGL 内存图片源（RGB565）。
+
+    为什么不用 PNG/JPG：固件 LVGL 只开了 CONFIG_LV_USE_PNG 且图片源走文件路径，
+    而设备可写文件系统不适合放大图。RGB565 内存源可以直接 lv_img_set_src(&dsc)。
+    """
+    if bvid in _cover_cache:
+        return _cover_cache[bvid]
+
+    if pic.startswith("//"):
+        pic = "https:" + pic
+    if not pic.startswith("http"):
+        pic = "https://i0.hdslb.com" + pic
+
+    req = urllib.request.Request(pic)
+    req.add_header("User-Agent", UA)
+    req.add_header("Referer", REFERER)
+    with urllib.request.urlopen(req, timeout=20) as r:
+        jpg = r.read()
+
+    from PIL import Image
+    import io as _io
+    import struct
+    img = Image.open(_io.BytesIO(jpg)).convert("RGB").resize((COVER_W, COVER_H), Image.LANCZOS)
+
+    out = bytearray()
+    out += struct.pack("<I", 1 | (COVER_W << 10) | (COVER_H << 21))   # header: cf=1, w, h
+    out += struct.pack("<I", COVER_W * COVER_H * 2)                    # data_size
+    for r, g, b in img.getdata():
+        out += struct.pack("<H", ((r >> 3) << 11) | ((g >> 2) << 5) | (b >> 3))
+
+    data = bytes(out)
+    _cover_cache[bvid] = data
+    print(f"[cover] {bvid} {len(jpg)}B jpg -> {len(data)}B rgb565", flush=True)
+    return data
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -306,12 +374,15 @@ class Handler(BaseHTTPRequestHandler):
                     token = uuid.uuid4().hex[:12]
                     _stream_cache[token] = local
                     print(f"[play-bv] {bvid} {it['title'][:24]} {time.time()-t0:.1f}s", flush=True)
+                    token_c = uuid.uuid4().hex[:12]
+                    _stream_cache[token_c] = it.get("pic", "")
                     return self._json({
                         "ok": True,
                         "title": it["title"],
                         "author": it["author"],
                         "duration": it["duration"],
                         "url": f"http://{LAN_IP}:{PORT}/stream/{token}",
+                        "cover": f"http://{LAN_IP}:{PORT}/cover/{token_c}",
                         "bitrate": bw,
                     })
 
@@ -329,12 +400,15 @@ class Handler(BaseHTTPRequestHandler):
                 _stream_cache[token] = local
                 short = f"http://{LAN_IP}:{PORT}/stream/{token}"
                 print(f"[play] '{q}' -> {it['title'][:30]} ({bw}bps) {time.time()-t0:.1f}s token={token}", flush=True)
+                token_c = uuid.uuid4().hex[:12]
+                _stream_cache[token_c] = it.get("pic", "")
                 return self._json({
                     "ok": True,
                     "title": it["title"],
                     "author": it["author"],
                     "duration": it["duration"],
                     "url": short,
+                    "cover": f"http://{LAN_IP}:{PORT}/cover/{token_c}",
                     "bitrate": bw,
                 })
 
@@ -346,6 +420,24 @@ class Handler(BaseHTTPRequestHandler):
                 for it in items:
                     it["url"], _, _ = audio_url(it["bvid"])
                 return self._json({"ok": True, "items": items})
+
+            if parsed.path.startswith("/cover/"):
+                token_c = parsed.path.rsplit("/", 1)[-1]
+                pic = _stream_cache.get(token_c)
+                if not pic:
+                    return self._json({"ok": False, "error": "cover token expired"}, 404)
+                try:
+                    data = get_cover(token_c, pic)
+                except Exception as e:
+                    print(f"[cover] error {type(e).__name__}: {e}", flush=True)
+                    return self._json({"ok": False, "error": "cover failed"}, 502)
+                self.send_response(200)
+                self.send_header("Content-Type", "application/octet-stream")
+                self.send_header("Content-Length", str(len(data)))
+                self.end_headers()
+                self.wfile.write(data)
+                print(f"[cover] sent {len(data)}B", flush=True)
+                return
 
             if parsed.path.startswith("/stream/"):
                 token = parsed.path.rsplit("/", 1)[-1]

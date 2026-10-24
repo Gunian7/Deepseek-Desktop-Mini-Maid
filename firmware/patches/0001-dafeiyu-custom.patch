@@ -1,0 +1,353 @@
+diff --git a/apps-ui/apps/llm/presenters/home_presenter.c b/apps-ui/apps/llm/presenters/home_presenter.c
+index a10afb8c..d9606dd6 100644
+--- a/apps-ui/apps/llm/presenters/home_presenter.c
++++ b/apps-ui/apps/llm/presenters/home_presenter.c
+@@ -15,6 +15,7 @@
+ #include "model_alarm.h"
+ #include "lisa_ui_llm_primary.h"
+ #include "emoji_anim.h"
++#include "utils/music_ui.h"
+ #include "model_camera.h"
+ #include "model_modem.h"
+ #include "model_wifi.h"
+@@ -2579,7 +2580,9 @@ static void model_voice_on_standby_text_update(void *arg, const char *text, bool
+         }
+         scr_data->music_text_active = 1;
+         standby_text_timer_update(scr_data);
+-        lisa_ui_llm_primary_set_content_text(scr_data->view, text);
++        /* 歌名由音乐界面（窄条/全屏）显示，正文区留空，避免两处重复。 */
++        lisa_ui_llm_primary_set_content_text(scr_data->view, "");
++        music_ui_set_title(text);
+         return;
+     }
+ 
+@@ -2866,6 +2869,7 @@ static int home_nav_scr_open(const struct lisa_ui_nav_scr *scr, void **data)
+     model_camera_preview_init(&scr_data->camera_preview);
+ 
+     scr_data->view = lisa_ui_llm_primary_create(lv_scr_act());
++    music_ui_init(scr_data->view);
+ #ifndef CONFIG_BOARD_ARCS_MINI
+     lisa_ui_llm_primary_set_settings_icon_event_cb(scr_data->view, settings_btn_event_cb, scr_data);
+ #endif
+diff --git a/apps-ui/apps/llm/utils/CMakeLists.txt b/apps-ui/apps/llm/utils/CMakeLists.txt
+index 7fe96fe4..eb4581ff 100644
+--- a/apps-ui/apps/llm/utils/CMakeLists.txt
++++ b/apps-ui/apps/llm/utils/CMakeLists.txt
+@@ -2,6 +2,7 @@ target_sources(
+     ${LISA_UI_LIB_NAME}
+     PRIVATE
+     emoji_anim.c
++    music_ui.c
+     img_utils.c
+     lv_img_utils.c
+ )
+diff --git a/apps/arcs-mini/button/app_button.c b/apps/arcs-mini/button/app_button.c
+index 01dd7201..c9a779f0 100644
+--- a/apps/arcs-mini/button/app_button.c
++++ b/apps/arcs-mini/button/app_button.c
+@@ -14,6 +14,8 @@
+ #include "miniapp.h"
+ #include "voice_intent_mgr.h"
+ #include "voice_msg.h"
++#include "utils/music_ui.h"
++#include "voice_player_music.h"
+ #include "voice_player_comm.h"
+ #include "voice_player/voice_player_tts.h"
+ #include "sys_wifi.h"
+@@ -246,6 +248,20 @@ static bool app_button_redirect_to_cloud_info(voice_msg_button_action_t action)
+  */
+ static void app_button_handle_click(void)
+ {
++    /* 搜索结果列表显示中：单击向下选择 */
++    if (music_ui_list_active()) {
++        LISA_LOGI(TAG, "Single click: list next");
++        music_ui_list_next();
++        return;
++    }
++
++    /* 音乐播放中：单击切换「窄条 / 全屏」两种播放界面，不唤醒。 */
++    if (voice_player_music_is_active()) {
++        LISA_LOGI(TAG, "Single click: toggle music ui mode");
++        music_ui_toggle_mode();
++        return;
++    }
++
+     if (service_power_policy_handle_function_click()) {
+         LISA_LOGI(TAG, "Single click: restored from hibernate without starting interaction");
+         return;
+@@ -291,6 +307,20 @@ static void app_button_handle_click(void)
+ /* 双击：进入按键拍照预览；若语音拍照流程已锁定，则取消并退出该流程。 */
+ static void app_button_handle_double_click(void)
+ {
++    /* 搜索结果列表显示中：双击选定播放 */
++    if (music_ui_list_active()) {
++        LISA_LOGI(TAG, "Double click: list confirm");
++        music_ui_list_confirm();
++        return;
++    }
++
++    /* 音乐播放中：双击暂停 / 继续。 */
++    if (voice_player_music_is_active()) {
++        LISA_LOGI(TAG, "Double click: toggle music pause");
++        voice_player_music_toggle_pause();
++        return;
++    }
++
+     button_camera_preview_handle_double_click();
+ }
+ 
+diff --git a/apps/arcs-mini/main.c b/apps/arcs-mini/main.c
+index c88c22bb..a2fe86a1 100644
+--- a/apps/arcs-mini/main.c
++++ b/apps/arcs-mini/main.c
+@@ -252,6 +252,9 @@ int main(int argc, char **argv)
+     extern int boot_watchdog_feed(void);
+     boot_watchdog_feed();
+ 
++    /* BRINGUP-MARK: 自编译固件身份标记，用于验证本地编译产物确实运行在板子上。验证完成后删除。 */
++    LISA_LOGI(TAG, "BRINGUP-MARK hermes-custom-build v3.0.3 board=arcs_mini3 alive");
++
+     voice_msg_sub(VOICE_MSG_SYSTEM_NETWORK_PROBE_SUCCESS, voice_system_network_probe_success, NULL);
+     voice_msg_sub(VOICE_MSG_SYSTEM_NETWORK_PROBE_FAIL, voice_wifi_provision_guard, NULL);
+     voice_msg_sub(VOICE_MSG_CLOUD_CONNECTED, voice_cloud_connected, NULL);
+diff --git a/apps/arcs-mini/mcp-tools/CMakeLists.txt b/apps/arcs-mini/mcp-tools/CMakeLists.txt
+index d2589244..f90c2e4b 100644
+--- a/apps/arcs-mini/mcp-tools/CMakeLists.txt
++++ b/apps/arcs-mini/mcp-tools/CMakeLists.txt
+@@ -11,6 +11,7 @@ listenai_library_sources(
+     mcp_tool_image.c
+     mcp_tool_duplex.c
+     mcp_tool_sd_music.c
++    mcp_tool_bili_music.c
+ )
+ 
+ if(CONFIG_LOG_UPLOAD)
+diff --git a/apps/arcs-mini/services/CMakeLists.txt b/apps/arcs-mini/services/CMakeLists.txt
+index f4c2abbd..5c957f02 100644
+--- a/apps/arcs-mini/services/CMakeLists.txt
++++ b/apps/arcs-mini/services/CMakeLists.txt
+@@ -9,6 +9,7 @@ listenai_library_sources(
+     service_image.c
+     service_sd_music.c
+     service_power_policy.c
++    service_mood.c
+ )
+ 
+ listenai_include_directories(
+diff --git a/apps/arcs-mini/voice_player/voice_player_music.c b/apps/arcs-mini/voice_player/voice_player_music.c
+index 570e082f..b5573b5f 100644
+--- a/apps/arcs-mini/voice_player/voice_player_music.c
++++ b/apps/arcs-mini/voice_player/voice_player_music.c
+@@ -426,3 +426,71 @@ int voice_player_music_init(void)
+ 
+     return ret == 0 ? 0 : -1;
+ }
++
++
++/* ==================== UI / 按键用的查询与控制接口 ==================== */
++
++bool voice_player_music_is_active(void)
++{
++    if (music_player == NULL) {
++        return false;
++    }
++    app_player_state_t st = app_player_get_state(music_player);
++    return st == APP_PLAYER_STATE_PLAYING || st == APP_PLAYER_STATE_PAUSED;
++}
++
++bool voice_player_music_is_paused(void)
++{
++    if (music_player == NULL) {
++        return false;
++    }
++    return app_player_get_state(music_player) == APP_PLAYER_STATE_PAUSED;
++}
++
++int voice_player_music_get_progress(uint32_t *pos_ms, uint32_t *dur_ms)
++{
++    uint32_t pos = 0;
++    uint32_t dur = 0;
++    int rp;
++    int rd;
++
++    if (pos_ms) {
++        *pos_ms = 0;
++    }
++    if (dur_ms) {
++        *dur_ms = 0;
++    }
++    if (music_player == NULL) {
++        return -1;
++    }
++
++    rp = app_player_get_position(music_player, &pos);
++    rd = app_player_get_duration(music_player, &dur);
++    if (pos_ms) {
++        *pos_ms = pos;
++    }
++    if (dur_ms) {
++        *dur_ms = dur;
++    }
++    return (rp == 0 && rd == 0) ? 0 : -1;
++}
++
++void voice_player_music_toggle_pause(void)
++{
++    app_player_state_t st;
++
++    if (music_player == NULL) {
++        return;
++    }
++
++    st = app_player_get_state(music_player);
++    if (st == APP_PLAYER_STATE_PLAYING) {
++        voice_intent_music_set_user_paused(true);
++        app_player_pause(music_player);
++        LOGI("[MUSIC] user pause");
++    } else if (st == APP_PLAYER_STATE_PAUSED) {
++        voice_intent_music_set_user_paused(false);
++        app_player_resume(music_player);
++        LOGI("[MUSIC] user resume");
++    }
++}
+diff --git a/apps/arcs-mini/voice_player/voice_player_music.h b/apps/arcs-mini/voice_player/voice_player_music.h
+index 09448ab5..1304d60a 100644
+--- a/apps/arcs-mini/voice_player/voice_player_music.h
++++ b/apps/arcs-mini/voice_player/voice_player_music.h
+@@ -26,4 +26,28 @@ int voice_player_play_music_url(const char *url);
+  */
+ void voice_player_music_publish_info(const char *name, const char *url);
+ 
++
++/**
++ * @brief 音乐是否正在播放或暂停（用于界面显示与按键拦截）。
++ */
++bool voice_player_music_is_active(void);
++
++/**
++ * @brief 当前是否处于用户暂停状态。
++ */
++bool voice_player_music_is_paused(void);
++
++/**
++ * @brief 取当前播放进度。
++ * @param pos_ms 输出：已播放毫秒数，可为 NULL
++ * @param dur_ms 输出：总时长毫秒数，可为 NULL
++ * @return 0 成功，-1 无播放器或取不到
++ */
++int voice_player_music_get_progress(uint32_t *pos_ms, uint32_t *dur_ms);
++
++/**
++ * @brief 用户双击：在播放/暂停之间切换。
++ */
++void voice_player_music_toggle_pause(void);
++
+ #endif /* VOICE_PLAYER_MUSIC_H */
+diff --git a/res/arcs-mini/emoji/emoji.json b/res/arcs-mini/emoji/emoji.json
+index dfb6d31d..4c8ebe64 100644
+--- a/res/arcs-mini/emoji/emoji.json
++++ b/res/arcs-mini/emoji/emoji.json
+@@ -1 +1 @@
+-{"default_emoji": "neutral", "animations": [{"name": "neutral", "alias": "待机"}, {"name": "battery", "alias": "充电"}, {"name": "wakeup", "alias": "聆听"}, {"name": "speaking", "alias": "说话"}, {"name": "sleepy", "alias": "休眠"}, {"name": "wait", "alias": "等待"}, {"name": "待机", "loop": {"path": "/待机/frame-%06d.png", "range": [0, 9], "interval_ms": 150}}, {"name": "充电", "loop": {"path": "/充电/frame-%06d.png", "range": [0, 1], "interval_ms": 100}}, {"name": "聆听", "loop": {"path": "/聆听/frame-%06d.png", "range": [0, 9], "interval_ms": 100}}, {"name": "说话", "loop": {"path": "/说话/frame-%06d.png", "range": [0, 9], "interval_ms": 100}}, {"name": "休眠", "loop": {"path": "/休眠/frame-%06d.png", "range": [0, 8], "interval_ms": 200}}, {"name": "等待", "loop": {"path": "/等待/frame-%06d.png", "range": [0, 9], "interval_ms": 150}}, {"name": "开心", "loop": {"path": "/开心/frame-%06d.png", "range": [0, 6], "interval_ms": 150}}, {"name": "伤心", "loop": {"path": "/伤心/frame-%06d.png", "range": [0, 9], "interval_ms": 200}}, {"name": "生气", "loop": {"path": "/生气/frame-%06d.png", "range": [0, 7], "interval_ms": 150}}, {"name": "大笑", "loop": {"path": "/大笑/frame-%06d.png", "range": [0, 9], "interval_ms": 100}}], "offset": {"y": 0}}
+\ No newline at end of file
++{"default_emoji":"neutral","animations":[{"name":"neutral","alias":"待机"},{"name":"battery","alias":"充电"},{"name":"wakeup","alias":"聆听"},{"name":"speaking","alias":"说话"},{"name":"sleepy","alias":"休眠"},{"name":"wait","alias":"等待"},{"name":"待机","loop":{"path":"/待机/frame-%06d.png","range":[0,19],"interval_ms":150}},{"name":"充电","loop":{"path":"/充电/frame-%06d.png","range":[0,1],"interval_ms":100}},{"name":"聆听","loop":{"path":"/聆听/frame-%06d.png","range":[0,9],"interval_ms":100}},{"name":"说话","loop":{"path":"/说话/frame-%06d.png","range":[0,9],"interval_ms":100}},{"name":"休眠","loop":{"path":"/休眠/frame-%06d.png","range":[0,8],"interval_ms":200}},{"name":"等待","loop":{"path":"/等待/frame-%06d.png","range":[0,9],"interval_ms":150}},{"name":"开心","loop":{"path":"/开心/frame-%06d.png","range":[0,15],"interval_ms":90}},{"name":"伤心","loop":{"path":"/伤心/frame-%06d.png","range":[0,9],"interval_ms":200}},{"name":"生气","loop":{"path":"/生气/frame-%06d.png","range":[0,7],"interval_ms":150}},{"name":"大笑","loop":{"path":"/大笑/frame-%06d.png","range":[0,9],"interval_ms":100}}],"offset":{"y":0}}
+\ No newline at end of file
+diff --git a/src/framework/voice_msg.h b/src/framework/voice_msg.h
+index 2053d075..06ea3909 100644
+--- a/src/framework/voice_msg.h
++++ b/src/framework/voice_msg.h
+@@ -284,6 +284,8 @@ enum {
+ 
+     VOICE_MSG_APP_BATTERY_QUERY_SHOW, /* voice_msg_battery_info_t * */
+     VOICE_MSG_APP_SD_MUSIC_PLAY_FAILED,
++    VOICE_MSG_APP_MUSIC_LIST_SHOW,      /* voice_msg_music_list_t * 搜索结果列表 */
++    VOICE_MSG_APP_MUSIC_SELECT,         /* voice_msg_music_select_t * 列表里选中的项 */
+     VOICE_MSG_APP_MAX,
+ };
+ 
+@@ -315,4 +317,19 @@ int voice_invoke_sync(voice_invoke_sync_worker_t worker, void *data, uint32_t le
+ }
+ #endif
+ 
++/* ---- B 站音乐搜索结果列表（端侧 UI 用） ---- */
++#define VOICE_MSG_MUSIC_LIST_MAX   5
++#define VOICE_MSG_MUSIC_TITLE_LEN  80
++#define VOICE_MSG_MUSIC_BVID_LEN   16
++
++typedef struct {
++    uint8_t count;
++    char title[VOICE_MSG_MUSIC_LIST_MAX][VOICE_MSG_MUSIC_TITLE_LEN];
++    char bvid[VOICE_MSG_MUSIC_LIST_MAX][VOICE_MSG_MUSIC_BVID_LEN];
++} voice_msg_music_list_t;
++
++typedef struct {
++    uint8_t index;
++} voice_msg_music_select_t;
++
+ #endif
+diff --git a/src/server/lschat_server/mcp_tool_kuwo_music.c b/src/server/lschat_server/mcp_tool_kuwo_music.c
+index 7d739248..5b9b66a1 100644
+--- a/src/server/lschat_server/mcp_tool_kuwo_music.c
++++ b/src/server/lschat_server/mcp_tool_kuwo_music.c
+@@ -41,22 +41,18 @@ static cJSON *ls_play_kuwo_music_items_create(void)
+ 
+ static cJSON *ls_play_kuwo_music_list(const char *name)
+ {
+-    cJSON *tool = mcp_tool_list_info_create_default(name, "播放酷我音乐");
++    /* 工具名沿用内置的 play_kuwo_music（云端 LLM 只认它当音乐入口），
++     * 但 schema 改成按歌名搜索：真正的实现在 bili_music_search_entry()。
++     * 原 schema 是 items/itemid，LLM 会按那个格式传参，这里必须换成 song。 */
++    cJSON *tool = mcp_tool_list_info_create_default(
++        name, "播放音乐。用户说「放首歌」「播放晴天」「播放某某音乐」时调用。"
++              "参数 song 直接填用户原话，不要判断是否存在于知识库、也不要判断有没有版权，"
++              "直接传参让工具实时搜索。不要回答「找不到」，先调用本工具再说。");
+     if (!tool) {
+         return NULL;
+     }
+ 
+-    cJSON *properties = mcp_tool_info_properties_get(tool);
+-    if (!properties) {
+-        cJSON_Delete(tool);
+-        return NULL;
+-    }
+-
+-    cJSON *result = cJSON_CreateObject();
+-    cJSON *items = ls_play_kuwo_music_items_create();
+-    cJSON_AddItemToObject(result, "items", items);
+-
+-    mcp_tool_info_add_json_property(tool, "result", items, true);
++    mcp_tool_info_add_property(tool, "song", "歌名或歌手，例如“晴天”“周杰伦”", "string", true);
+ 
+     return tool;
+ }
+@@ -132,10 +128,23 @@ static cJSON *ls_play_kuwo_music_no_valid_result(const char *name, const char *r
+ }
+ 
+ 
++/* 由 apps/arcs-mini/mcp-tools/mcp_tool_bili_music.c 提供 */
++extern cJSON *bili_music_search_entry(const char *name, cJSON *args);
++
+ static cJSON *ls_play_kuwo_music_call(const char *id, const char *name, cJSON *args)
+ {
+     (void)id;
+ 
++    /* 内置酷我需要付费开通，调用只会返回「曲库里没有」。
++     * 但云端 LLM 认这个工具名，所以保留名字、把执行转发到 B 站搜索：
++     * 搜索结果的列表会推到设备屏幕，用户单击/双击选择。 */
++    return bili_music_search_entry(name, args);
++}
++
++static cJSON *ls_play_kuwo_music_call_legacy(const char *id, const char *name, cJSON *args)
++{
++    (void)id;
++
+     if (args == NULL) {
+         LOGE("mcp tool call args is NULL");
+         return ls_play_kuwo_music_no_valid_result(name, "args is NULL");
+@@ -225,4 +234,6 @@ static cJSON *ls_play_kuwo_music_call(const char *id, const char *name, cJSON *a
+     return ls_play_kuwo_music_result(name, "已提交播放请求", false);
+ }
+ 
++/* 保留内置工具名（云端 LLM 只认这个名字当音乐入口），
++ * 但 call 已转发到 B 站搜索 —— 见上面的 ls_play_kuwo_music_call。 */
+ MCP_TOOL_DEFINE(ls.built_in.play_kuwo_music, ls_play_kuwo_music_list, ls_play_kuwo_music_call);

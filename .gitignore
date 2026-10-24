@@ -1,0 +1,27 @@
+# 官方 SDK 本体（809 MB），用 README 里的 clone 命令拉取后自己应用 patch
+arcs_mini/
+
+# 整个工作目录（音频缓存、参考素材、临时文件都不进库）
+work/
+
+# 临时/缓存
+work/audio_cache/
+work/__pycache__/
+**/__pycache__/
+*.pyc
+work/*.json
+work/*.bin
+work/*.txt
+work/*.log
+
+# 构建产物
+build*/
+*.o
+*.d
+*.lpk
+*.ota.txz
+*.combined.hex
+
+# 编辑器
+.vscode/
+.idea/

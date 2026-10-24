@@ -1,0 +1,387 @@
+
+ListenAI:/$ [2K[36;22mI/APP_PLAYER      [00:00:01.440 1 main] Instance registered: id=4[0m
+ListenAI:/$ [2K[36;22mI/audiomgr        [00:00:01.440 1 main] Channel registered: id=4, name=miniapp, priority=45, capture_count=0[0m
+ListenAI:/$ [2K[36;22mI/APP_PLAYER_FOCUS [00:00:01.440 1 main] Registered focus channel for player miniapp (id=4, priority=45)[0m
+ListenAI:/$ [2K[36;22mI/APP_PLAYER      [00:00:01.440 1 main] Player created successfully: miniapp (id=4, handle=0x28526118)[0m
+ListenAI:/$ [2K[36;22mI/adb.sh          [00:00:01.442 1 shell_task] adb shell task start, arg:0x284d8c90
+[0m
+ListenAI:/$ [2K[31;22mE/NO_TAG          [00:00:01.450 1 main] lisa_kv_get_small_data(key: user.volume) fail, old_len is 0[0m
+ListenAI:/$ [2K[33;22mW/voice_player_comm [00:00:01.451 1 main] Failed to get system volume from kv, use default 70[0m
+ListenAI:/$ [2K[36;22mI/voice_player_comm [00:00:01.451 1 volctrl] Volume thread applying: 70[0m
+ListenAI:/$ [2K[36;22mI/APP_PLAYER      [00:00:01.451 1 volctrl] Set volume: 70[0m
+ListenAI:/$ [2K[36;22mI/APP_PLAYER      [00:00:01.451 1 volctrl] Set volume: 70[0m
+ListenAI:/$ [2K[36;22mI/APP_PLAYER      [00:00:01.451 1 volctrl] Set volume: 70[0m
+ListenAI:/$ [2K[36;22mI/APP_PLAYER      [00:00:01.451 1 volctrl] Set volume: 70[0m
+ListenAI:/$ [2K[36;22mI/APP_PLAYER      [00:00:01.451 1 volctrl] Set volume: 70[0m
+ListenAI:/$ [2K[33;22mW/app.datas       [00:00:01.454 1 sys.net.mgr] Attempting to access app data in a dangerous thread. Caller: 0x3064ea8e, current thread:sys.net.mgr, safety thread: main[0m
+ListenAI:/$ [2K[33;22mW/app.datas       [00:00:01.455 1 sys.net.mgr] Attempting to access app data in a dangerous thread. Caller: 0x3064ea8e, current thread:sys.net.mgr, safety thread: main[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [00:00:01.455 1 sys.net.mgr] ebus msg send, chn:0x2845f01c, evt:65541[0m
+ListenAI:/$ [2K[36;22mI/sys.net.mgr     [00:00:01.455 1 sys.net.mgr] Starting WiFi bearer[0m
+ListenAI:/$ [2K[36[2K[36;22mI/emoji_anim      [00:00:01.495 1 main] Loaded emoji animation assets: 待机[0m
+ListenAI:/$ [2K[36;22mI/emoji_anim      [00:00:01.495 1 main] Loaded emoji animation assets: 充电[0m
+ListenAI:/$ [2K[36;22mI/emoji_anim      [00:00:01.498 1 main] Loaded emoji animation assets: 聆听[0m
+ListenAI:/$ [2K[36;22mI/emoji_anim      [00:00:01.501 1 main] Loaded emoji animation assets: 说话[0m
+ListenAI:/$ [2K[36;22mI/emoji_anim      [00:00:01.504 1 main] Loaded emoji animation assets: 休眠[0m
+ListenAI:/$ [2K[36;22mI/emoji_anim      [00:00:01.507 1 main] Loaded emoji animation assets: 等待[0m
+ListenAI:/$ [2K[36;22mI/emoji_anim      [00:00:01.508 1 main] Loaded emoji animation assets: 开心[0m
+ListenAI:/$ [2K[36;22mI/emoji_anim      [00:00:01.508 1 main] Loaded emoji animation assets: 伤心[0m
+ListenAI:/$ [2K[36;22mI/emoji_anim      [00:00:01.514 1 main] Loaded emoji animation assets: 生气[0m
+ListenAI:/$ [2K[36;22mI/emoji_anim      [00:00:01.516 1 main] Loaded emoji animation assets: 大笑[0m
+ListenAI:/$ [2K[36;22mI/emoji_anim      [00:00:01.517 1 main] Emoji animation loaded, valid: 16 / 16[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [00:00:01.517 1 main] ebus msg send, chn:0x2845f01c, evt:262144[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [00:00:01.517 1 voice.ebus] ebus msg received, chn:0x2845f01c, evt:262144[0m
+ListenAI:/$ [2K[36;22mI/voice.app.platform [00:00:01.518 1 voice.ebus] network probe ready[0m
+ListenAI:/$ [2K[36;22mI/voice_player    [00:00:01.518 1 voice.ebus] voice_player_ready[0m
+ListenAI:/$ [2K[36;22mI/intent_mgr      [00:00:01.518 1 voice.ebus] registered ops for MUSIC[0m
+ListenAI:/$ [2K[36;22mI/intent_mgr      [00:00:01.519 1 voice.ebus] registered ops for VOICE_SESSION[0m
+ListenAI:/$ [2K[36;22mI/intent_mgr      [00:00:01.519 1 voice.ebus] registered ops for PHOTO_FLOW[0m
+ListenAI:/$ [2K[36;22mI/intent_mgr      [00:00:01.519 1 voice.ebus] registered ops for ALARM[0m
+ListenAI:/$ [2K[36;22mI[2K[36;22mI/voice_player    [00:00:01.520 1 voice.ebus] async play task created successfully[0m
+ListenAI:/$ [2K[36;22mI/APP_PLAYER      [00:00:01.520 1 voice.ebus] Registering callback for player: tts (id=1)[0m
+ListenAI:/$ [2K[36;22mI/APP_PLAYER      [00:00:01.520 1 voice.ebus] Callback registered successfully: tts (cb=0x306b5dfa, user_data=0x0)[0m
+ListenAI:/$ [2K[36;22mI/APP_PLAYER      [00:00:01.521 1 voice.ebus] Registering callback for player: tone (id=0)[0m
+ListenAI:/$ [2K[36;22mI/APP_PLAYER      [00:00:01.521 1 voice.ebus] Callback registered successfully: tone (cb=0x306b7f38, user_data=0x0)[0m
+ListenAI:/$ [2K[36;22mI/platform        [00:00:01.550 1 main] ==== Application Ready!!!=====
+[0m
+ListenAI:/$ [2K[36;22mI/adb.srv         [00:00:01.550 1 main] service handle register success, name: sync
+[0m
+ListenAI:/$ [2K[36;22mI/recognize.cmd.msg [00:00:01.550 1 main] recognize_cmd_msg_process_init[0m
+ListenAI:/$ [2K[36;22mI/cmd_router      [00:00:01.555 1 main] Workqueue created for timeout handling[0m
+ListenAI:/$ [2K[36;22mI/cmd_router      [00:00:01.555 1 main] cmd_router initialized with timer[0m
+ListenAI:/$ [2K[36;22mI/main            [00:00:01.555 1 main] BRINGUP-MARK hermes-custom-build v3.0.3 board=arcs_mini3 alive[0m
+ListenAI:/$ [2K[36;22mI/led             [00:00:01.577 1 main] LED service initialized[0m
+ListenAI:/$ [2K[31;22mE/NO_TAG          [00:00:02.647 1 main] lisa_kv_get_small_data(key: user.min_volume) fail, old_len is 0[0m
+ListenAI:/$ [2K[31;22mE/NO_TAG          [00:00:02.652 1 main] lisa_kv_get_small_data(key: user.min_volume) fail, old_len is 0[0m
+ListenAI:/$ [2K[36;22mI/volume          [00:00:02.652 1 main] volume init: 70 (min: 10)[0m
+ListenAI:/$ [2K[36;22mI/lisa_display    [00:00:02.652 1 main] Panel name not specified, fallback to single-panel default: st7789p3[0m
+ListenAI:/$ [2K[36;22mI/lisa_display    [00:00:02.657 1 main] Created new bus mutex for independent bus[0m
+ListenAI:/$ [2Kspi_set_bus_speed: sclk_div = 0 (sclk: 50000000), cs2sclk = 1
+ListenAI:/$ [2K
+ListenAI:/$ [2K[36;22mI/panel.st7789p3  [00:00:02.921 1 main] ST7789P3 initialized[0m
+ListenAI:/$ [2K[31;22mE/NO_TAG          [00:00:02.062 1 main] lisa_kv_get_small_data(key: user.brightness) fail, old_len is 0[0m
+ListenAI:/$ [2K[36;22mI/brightness      [00:00:02.062 1 main] Brightness service initialized[0m
+ListenAI:/$ [2K[36;22mI/btn             [00:00:02.065 1 main] GPIO initialized[0m
+ListenAI:/$ [2K[36;22mI/btn             [00:00:02.066 1 main] GPIO Button 0 registered (pin=4)[0m
+ListenAI:/$ [2K[36;22mI/btn             [00:00:02.066 1 btn] Button scan task started[0m
+ListenAI:/$ [2K[36;22mI/btn             [00:00:02.070 1 main] GPIO button init done: 1 buttons[0m
+ListenAI:/$ [2K[36;22mI/lisa_wifi       [00:00:02.124 1 event task] EVENT_WIFI_SCAN_DONE[0m
+ListenAI:/$ [2K[36;22mI/wifi_arcs       [00:00:02.124 1 wifi_mgr_thread] Got 13 scan results,ret:0
+[0m
+ListenAI:/$ [2K[36;22mI/wifi_mgr        [00:00:02.125 1 wifi_mgr_thread] wifi_event_handler: wifi_event: 0x10,event_data:0x28482998 [0m
+ListenAI:/$ [2K[36;22mI/wifi_mgr        [00:00:02.126 1 wifi_mgr_thread] wifi scan ap_num: 13[0m
+ListenAI:/$ [2K[36;22mI/wifi_mgr        [00:00:02.126 1 wifi_mgr_thread] Found 1 available APs to try in this cycle[0m
+ListenAI:/$ [2K[33;22mW/wifi_mgr        [00:00:02.127 1 wifi_mgr_thread] Skipping AP with empty SSID (ce:62:fe:35:b1:87)[0m
+[33;22mW/wifi_mgr        [00:00:02.127 1 wifi_mgr_thread] Skipping AP with empty SSID (ac:bd:70:05:90:b9)[0m
+ListenAI:/$ [2K[33;22mW/wifi_mgr        [00:00:02.127 1 wifi_mgr_thread] Skipping AP with empty SSID (ac:bd:70:05:90:b5)[0m
+ListenAI:/$ [2K[33;22mW/wifi_mgr        [00:00:02.127 1 wifi_mgr_thread] Skipping AP with empty SSID (56:4f:3b:aa:43:d2)[0m
+ListenAI:/$ [2K[36;22mI/wifi_mgr        [00:00:02.128 1 wifi_mgr_thread] Selected AP 1/1: ssid:铭, rssi: -38, bssid:6a:44:a1:c3:e2:bc (last_tried_index=-1)[0m
+ListenAI:/$ [2K[36;22mI/wifi_mgr        [00:00:02.129 1 wifi_mgr_thread] Attempt 1/1: Trying to connect to 铭 (6a:44:a1:c3:e2:bc)[0m
+ListenAI:/$ [2K[36;22mI/wifi_arcs       [00:00:02.129 1 wifi_mgr_thread] [convert_to_ls_wifi_type 423]mode:0[0m
+ListenAI:/$ [2K[36;22mI/wifi_arcs       [00:00:02.130 1 wifi_mgr_thread] PMK restored to hardware for fast reconnection[0m
+ListenAI:/$ [2K[36;22mI/lisa_camera     [00:00:02.219 1 main] PWDN pin initialized (pin=6, level=0)[0m
+ListenAI:/$ [2K[36;22mI/lisa_camera     [00:00:02.219 1 main] Enabling XCLK output: 18000000 Hz[0m
+ListenAI:/$ [2K[33;22mW/lisa_camera     [00:00:02.222 1 main] RESET GPIO device not configured, skipping[0m
+ListenAI:/$ [2K[36;22mI/lisa_i2c_arcs   [00:00:02.222 1 main] I2C configured: speed=400000 Hz, mode=master[0m
+ListenAI:/$ [2K[36;22mI/lisa_camera     [00:00:02.225 1 main] Sensor detected: PID=0x009D, addr=0x21[0m
+ListenAI:/$ [2K[36;22mI/wifi_arcs       [00:00:02.404 1 event task] PMK cached in sta_config[0m
+ListenAI:/$ [2K[36;22mI/wifi_mgr        [00:00:02.404 1 event task] wifi_event_handler: wifi_event: 0x01,event_data:0x200395cc [0m
+ListenAI:/$ [2K[36;22mI/user_wifi       [00:00:02.404 1 event task] mgr connection: 0[0m
+ListenAI:/$ [2K[36;22mI/user_wifi       [00:00:02.404 1 event task] WiFi connected, starting network interface[0m
+ListenAI:/$ [2KINF:vif[0] start dhcp...
+[36;22mI/ebus.core       [00:00:02.405 1 event task] ebus msg send, chn:0x2845f01c, evt:327680[0m
+ListenAI:/$ [2K[36;22mI/lisa_wifi       [00:00:02.416 1 event task] EVENT_WIFI_CONNECTED[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [00:00:02.420 1 voice.ebus] ebus msg received, chn:0x2845f01c, evt:327680[0m
+ListenAI:/$ [2K[36;22mI/wifi_arcs       [00:00:02.421 1 wifi_mgr_thread] arcs_wifi_sta_connect return: 0[0m
+ListenAI:/$ [2K[36;22mI/wifi_mgr        [00:00:02.421 1 wifi_mgr_thread] Successfully connected to ssid: 铭, bssid: 6a:44:a1:c3:e2:bc, pwd: meiyoumima945, channel: 1, rssi: -38[0m
+ListenAI:/$ [2K[36;22mI/wifi_mgr        [00:00:02.421 1 wifi_mgr_thread] Connect cost: 292 ms[0m
+ListenAI:/$ [2K[36;22mI/lisa_wifi       [00:00:02.453 1 event task] EVENT_WIFI_GOT_IP[0m
+ListenAI:/$ [2KINF:{VIF-0} ip=10.43.131.226/24
+[36;22mI/ebus.core       [00:00:02.455 1 RX] ebus msg send, chn:0x2845f01c, evt:327683[0m
+ListenAI:/$ [2K[36;22mI/user_wifi       [00:00:02.456 1 RX] DHCP Success on VIF-0: IP=10.43.131.226, Mask=255.255.255.0, GW=10.43.131.117[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [00:00:02.456 1 voice.ebus] ebus msg received, chn:0x2845f01c, evt:327683[0m
+ListenAI:/$ [2K[36;22mI/NO_TAG          [00:00:02.456 1 voice.ebus] voice_wifi_ip_got[0m
+ListenAI:/$ [2K[33;22mW/app.datas       [00:00:02.456 1 voice.ebus] Attempting to access app data in a dangerous thread. Caller: 0x30650020, current thread:voice.ebus, safety thread: main[0m
+ListenAI:/$ [2K[33;22mW/app.datas       [00:00:02.456 1 voice.ebus] Attempting to access app data in a dangerous thread. Caller: 0x3064ea8e, current thread:voice.ebus, safety thread: main[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [00:00:02.457 1 voice.ebus] ebus msg send, chn:0x2845f01c, evt:65539[0m
+ListenAI:/$ [2K[36;22mI/sys.net.probe   [00:00:02.457 1 sys.net.probe] sntp query start[0m
+ListenAI:/$ [2K[36;22mI/sal_socket      [00:00:02.458 1 sys.net.probe] 1154, sal_socket, 0---
+ListenAI:/$ [2K[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [00:00:02.459 1 voice.ebus] ebus msg received, chn:0x2845f01c, evt:65539[0m
+ListenAI:/$ [2K[36;22mI/lisa_camera     [00:00:02.483 1 main] Detected sensor frame size: 640x480[0m
+ListenAI:/$ [2K[36;22mI/lisa_camera     [00:00:02.484 1 main] Detected sensor pixel format: 0[0m
+ListenAI:/$ [2K[36;22mI/lisa_camera     [00:00:02.486 1 main] Frame buffers initialized: count=2, size=614400 (system memory)[0m
+ListenAI:/$ [2K[36;22mI/lisa_camera     [00:00:02.486 1 main] Camera setup completed[0m
+ListenAI:/$ [2K[36;22mI/lisa_camera     [00:00:02.489 1 main] Frame buffer queues reset: 2 buffers available[0m
+ListenAI:/$ [2K[36;22mI/lisa_camera     [00:00:02.489 1 main] Frame buffers refreshed: count=2, frame=614400, slot=614400[0m
+ListenAI:/$ [2K[31;22mE/NO_TAG          [00:00:02.493 1 main] lisa_kv_get_small_data(key: user.camera.hmirror) fail, old_len is 0[0m
+ListenAI:/$ [2K[31;22mE/NO_TAG          [00:00:02.497 1 main] lisa_kv_get_small_data(key: user.camera.flip) fail, old_len is 0[0m
+ListenAI:/$ [2K[33;22mW/app.datas       [00:00:02.510 1 sys.net.probe] Attempting to access app data in a dangerous thread. Caller: 0x3064ea8e, current thread:sys.net.probe, safety thread: main[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [00:00:02.510 1 sys.net.probe] ebus msg send, chn:0x2845f01c, evt:65537[0m
+ListenAI:/$ [2K[36;22mI/sys.net.probe   [00:00:02.510 1 sys.net.probe] time sync done, tv_sec:1792810565, tv_usec:0[0m
+ListenAI[2K[33;22mW/app.datas       [10:56:05.001 1 voice.ebus] Attempting to access app data in a dangerous thread. Caller: 0x30651e74, current thread:voice.ebus, safety thread: main[0m
+ListenAI:/$ [2K[36;22mI/voice.app.platform [10:56:05.001 1 voice.ebus] network probe success[0m
+ListenAI:/$ [2K[36;22mI/lisa_camera     [10:56:05.109 1 main] Subsample 2x2: frame size -> 320x240[0m
+ListenAI:/$ [2K[36;22mI/lisa_camera     [10:56:05.109 1 main] Frame buffer queues reset: 2 buffers available[0m
+ListenAI:/$ [2K[36;22mI/lisa_camera     [10:56:05.110 1 main] Frame buffers re-initialized: count=2, size=153600[0m
+ListenAI:/$ [2K[36;22mI/lisa_dvp        [10:56:05.110 1 main] DVP initialized successfully with GPDMA channel 4[0m
+ListenAI:/$ [2K[36;22mI/lisa_dvp        [10:56:05.110 1 main] DVP clockout enabled successfully, freq: 18000000 Hz[0m
+ListenAI:/$ [2K[36;22mI/service_camera  [10:56:05.110 1 main] Camera ready: 320x240 RGB565, hmirror=1, vflip=0[0m
+ListenAI:/$ [2K[36;22mI/lisa_adc_arcs   [10:56:05.118 1 main] Channel 3 configured: ref=1, 10-bit, vref_sel=0, vin_buf=1[0m
+ListenAI:/$ [2K[36;22mI/battery_ui      [10:56:05.143 1 main] Restored display pct from KV: 100%[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:05.145 1 main] ebus msg send, chn:0x2845f01c, evt:196610[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:05.145 1 voice.ebus] ebus msg received, chn:0x2845f01c, evt:196610[0m
+ListenAI:/$ [2K[36;22mI/power.policy    [10:56:05.146 1 main] Initialized: idle=30s, hibernate=5min, shutdown=15min total (hibernate+10min), low-battery threshold=30%[0m
+ListenAI:/$ [2K[36;22mI/lvgl_heap       [10:56:05.151 1 main] LVGL heap initialized: 1048576 bytes at 0x0x28305910[0m
+ListenAI:/$ [2K[31;22mE/NO_TAG          [10:56:05.154 1 main] lisa_kv_get_blob fail(key: user.locale), old_len is 0[0m
+ListenAI:/$ [2K[33;22mW/NO_TAG          [10:56:05.154 1 main] locale not found, use zn-CN[0m
+ListenAI:/$ [2K[48;5;239m[36;22m[ap][36;22mI/wakeup_algo     [00:00:03.246 0 acomp_workqueue] counter_avg=104.66(M/S), cnt_part=167451995[0m
+ListenAI:/$ [2K[0mListenAI:/$ [2K[31;22mE/NO_TAG          [10:56:06.504 1 ota_check] lisa_kv_get_small_data(key: user.disable_app_update) fail, old_len is 0[0m
+ListenAI:/$ [2K[31;22mE/NO_TAG          [10:56:06.505 1 ota_check] lisa_kv_get_small_data(key: user.disable_wakeword_update) fail, old_len is 0[0m
+ListenAI:/$ [2K[31;22mE/NO_TAG          [10:56:06.507 1 ota_check] lisa_kv_get_small_data(key: user.disable_tone_update) fail, old_len is 0[0m
+ListenAI:/$ [2K[31;22mE/NO_TAG          [10:56:06.508 1 ota_check] lisa_kv_get_small_data(key: user.disable_emoji_update) fail, old_len is 0[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:06.508 1 ota_check] ebus msg send, chn:0x2845f01c, evt:983041[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:06.509 1 voice.ebus] ebus msg received, chn:0x2845f01c, evt:983041[0m
+ListenAI:/$ [2K[33;22mW/app.datas       [10:56:06.509 1 ota_check] Attempting to access app data in a dangerous thread. Caller: 0x3065dcd4, current thread:ota_check, safety thread: main[0m
+ListenAI:/$ [2K[33;22mW/app.datas       [10:56:06.509 1 ota_check] Attempting to access app data in a dangerous thread. Caller: 0x3065dcdc, current thread:ota_check, safety thread: main[0m
+ListenAI:/$ [2Ktcp_alloc 0x285a30c0
+
+[36;22mI/sal_socket      [10:56:06.510 1 ota_check] 1154, sal_socket, 0---
+ListenAI:/$ [2K[0m
+ListenAI:/$ [2K[36;22mI/wifi_arcs       [10:56:06.680 1 main] WIFI get link status:2
+ListenAI:/$ [2K[0m
+ListenAI:/$ [2K[36;22mI/NO_TAG          [10:56:06.683 1 main] Sync cloud state on init: connected=0[0m
+ListenAI:/$ [2K[31;22mE/NO_TAG          [10:56:06.686 1 main] lisa_kv_get_small_data(key: user.brightness) fail, old_len is 0[0m
+ListenAI:/$ [2K[36;22mI/NO_TAG          [10:56:06.686 1 main] Initializing alarm model[0m
+ListenAI:/$ [2K[36;22mI/NO_TAG          [10:56:06.686 1 main] Alarm model initialized[0m
+ListenAI:/$ [2K[36;22mI/model_qrcode    [10:56:06.686 1 main] Subscribed to VOICE_MSG_CLOUD_SHOW_QRCODE[0m
+ListenAI:/$ [2K[36;22mI/NO_TAG          [10:56:06.692 1 main] Initializing alarm navigation handler[0m
+ListenAI:/$ [2K[36;22mI/NO_TAG          [10:56:06.692 1 main] Alarm navigation and voice control handler initialized[0m
+ListenAI:/$ [2K[36;22mI/LISA_UI_ANIM    [10:56:06.700 1 main] Animation widget created[0m
+ListenAI:/$ [2K[36;22mI/romfs           [10:56:06.729 1 main] romfs init success, volume: respak, size: 983040, addr: 0x30440000[0m
+ListenAI:/$ [2K[36;22mI/NO_TAG          [10:56:06.446 1 main] power policy state=0, reason=0[0m
+ListenAI:/$ [2K[36;22mI/battery         [10:56:06.447 1 OSTMR] ch32 adc raw: dev=exadc, ch=2, raw=702[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:06.447 1 OSTMR] ebus msg send, chn:0x2845f01c, evt:196609[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:06.447 1 voice.ebus] ebus msg received, chn:0x2845f01c, evt:196609[0m
+ListenAI:/$ [2K[31;22mE/NO_TAG          [10:56:06.456 1 main] lisa_kv_get_small_data(key: user.brightness) fail, old_len is 0[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:06.456 1 main] ebus msg send, chn:0x2845f01c, evt:131073[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:06.457 1 voice.ebus] ebus msg received, chn:0x2845f01c, evt:131073[0m
+ListenAI:/$ [2K[36;22mI/NO_TAG          [10:56:06.457 1 voice.ebus] voice invoke, worker: 0x30673522, data: 0x20039e30, len: 1[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:06.463 1 main] ebus msg send, chn:0x2845f01c, evt:131073[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:06.463 1 voice.ebus] ebus msg received, chn:0x2845f01c, evt:131073[0m
+ListenAI:/$ [2K[36;22mI/NO_TAG          [10:56:06.463 1 voice.ebus] voice invoke, worker: 0x30670e1e, data: 0x20039e40, len: 0[0m
+ListenAI:/$ [2K[33;22mW/app.datas       [10:56:06.464 1 voice.ebus] Attempting to access app data in a dangerous thread. Caller: 0x30670e2a, current thread:voice.ebus, safety thread: main[0m
+ListenAI:/$ [2K[31;22mE/NO_TAG          [10:56:06.472 1 main] lisa_kv_get_small_data(key: user.brightness) fail, old_len is 0[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:06.472 1 main] ebus msg send, chn:0x2845f01c, evt:131073[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:06.472 1 voice.ebus] ebus msg received, chn:0x2845f01c, evt:131073[0m
+ListenAI:/$ [2K[36;22mI/NO_TAG          [10:56:06.472 1 voice.ebus] voice invoke, worker: 0x30673522, data: 0x20039e40, len: 1[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [2K[36;22mI/NO_TAG          [10:56:06.479 1 voice.ebus] camera preview state changed, active=0 mode=0 captured=0 phase=0[0m
+ListenAI:/$ [2K[36;22mI/button.camera_preview [10:56:06.480 1 voice.ebus] camera preview state changed, active=0 mode=0 captured=0 phase=0[0m
+ListenAI:/$ [2K[36;22mI/NO_TAG          [10:56:06.486 1 main] enter_standby[0m
+ListenAI:/$ [2K[36;22mI/LISA_UI_ANIM    [10:56:06.490 1 main] Animation stopped and reset[0m
+ListenAI:/$ [2K[36;22mI/LISA_UI_ANIM    [10:56:06.490 1 main] Animation configured: 10 frames, default_delay=150ms, next_delay=150ms, loop=-1[0m
+ListenAI:/$ [2K[36;22mI/LISA_UI_ANIM    [10:56:06.491 1 main] Animation started[0m
+ListenAI:/$ [2K[36;22mI/ota_api         [10:56:07.643 1 ota_check] App OTA check response: {"package_id":"ec73e0b391cb15b98d282274807c66a7","version":"3.0.3","description":"1. 新增 固件与版型不匹配时的UI提示\n2. 调整 状态栏文本提示开发板名称","url":"https://cdn.listenai.com/public/ota_packages/8253fc89fb72eb41e958a1a68cfffbcd/files/arcs-mini3-v3.0.3-0-g56bf67d2.ota.txz","md5_checksum":"ef88710ddb41e160982f55483d05571d","version_number":3000003,"ota_mode":"mandatory"}[0m
+ListenAI:/$ [2K[36;22mI/ota_api         [10:56:07.646 1 ota_check] App OTA: server version_number=3000003 <= local=3000003, not an upgrade[0m
+ListenAI:/$ [2K[36;22mI/ota_manager     [10:56:07.647 1 ota_check] App OTA: already up-to-date[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:07.647 1 ota_check] ebus msg send, chn:0x2845f01c, evt:983041[0m
+ListenAI:/$ [2K[33;22mW/app.datas       [10:56:07.647 1 ota_check] Attempting to access app data in a dangerous thread. Caller: 0x3065d39c, current thread:ota_check, safety thread: main[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:07.648 1 voice.ebus] ebus msg received, chn:0x2845f01c, evt:983041[0m
+ListenAI:/$ [2Ktcp_alloc 0x285ae4a0
+
+[33;22mW/ebus.core       [10:56:07.679 1 voice.ebus] event bus performance monitor, event 983041 exec elapsed time: 31/20 ms, cb:0x3067107e[0m
+ListenAI:/$ [2K[36;22mI/sal_socket      [10:56:07.680 1 ota_check] 1154, sal_socket, 0---
+ListenAI:/$ [2K[0m
+ListenAI:/$ [2K[48;5;239m[36;22m[ap][36;22mI/wakeup          [00:00:04.691 0 acomp_workqueue] VAD gate closed: noise=119[0m
+ListenAI:/$ [2K[0mListenAI:/$ [2K[36;22mI/ota_api         [10:56:07.941 1 ota_check] Config data received: {"code":"SUCCESS","message":"查询成功","data":{"wakeup_word":{"text":"王道长","sensitivity":"medium","source":"device","updated_at":"2026-09-11T04:14:17.769Z","resources":[{"name":"wake_word.bin","url":"http://iflyos-external.oss-cn-shanghai.aliyuncs.com/lit/users/1846/wakeupword/20b559fa-80f8-493f-8fcb-01d588a63d42/wake_word.bin?OSSAccessKeyId=LTAI5tS5dA6ZhHoLczng3tFN&Expires=1792814168&Signature=lboUGIAeVOk61XIPmKD29x48SPc%3D","md5":"f60e1b49663c0dfc7e3df0cd551b8de0","size":1432576}]},"prompt_tone":{"url":"http://iflyos-external.oss-cn-shanghai.aliyuncs.com/public/prompt-tone/default/v1/b9f66f52219796fa64d110abf2c5d71d7b683536a40175e60ca3bf2baea8461e.bin?OSSAccessKeyId=LTAI5tS5dA6ZhHoLczng3tFN&Expires=1792814168&Signature=eBWRoSRsc9vWDPqp09465FGLHZ0%3D","md5":"5574cdc6bbe0c7892c7f59e4f18ebeb2","size":351232},"emoji":{"url":"http://iflyos-external.oss-cn-shanghai.aliyuncs.com/llm/users/ff75f3fc-65d9-468f-91af-f616ec44e66e[ListenAI:/$ [2K0m
+ListenAI:/$ [2K[36;22mI/ota_api         [10:56:07.944 1 ota_check] Found wake word resource (wake_word.bin), size: 1432576, md5: f60e1b49663c0dfc7e3df0cd551b8de0, url: http://iflyos-external.oss-cn-shanghai.aliyuncs.com/lit/users/1846/wakeupword/20b559fa-80f8-493f-8fcb-01d588a63d42/wake_word.bin?OSSAccessKeyId=LTAI5tS5dA6ZhHoLczng3tFN&Expires=1792814168&Signature=lboUGIAeVOk61XIPmKD29x48SPc%3D[0m
+ListenAI:/$ [2K[36;22mI/ota_api         [10:56:07.944 1 ota_check] Wakeup word text: 王道长[0m
+ListenAI:/$ [2K[36;22mI/ota_api         [10:56:07.945 1 ota_check] Found prompt_tone resource, size: 351232, md5: 5574cdc6bbe0c7892c7f59e4f18ebeb2, url: http://iflyos-external.oss-cn-shanghai.aliyuncs.com/public/prompt-tone/default/v1/b9f66f52219796fa64d110abf2c5d71d7b683536a40175e60ca3bf2baea8461e.bin?OSSAccessKeyId=LTAI5tS5dA6ZhHoLczng3tFN&Expires=1792814168&Signature=eBWRoSRsc9vWDPqp09465FGLHZ0%3D[0m
+ListenAI:/$ [2K[36;22mI/ota_api         [10:56:07.946 1 ota_check] Found emoji [2K[36;22mI/voice.cloud     [10:56:07.152 1 voice.ebus] device mode: 0[0m
+ListenAI:/$ [2K[36;22mI/lsc_core        [10:56:07.153 1 voice.ebus] lschat version: v1.1.0, commit:mini-v3.0.3-dirty[0m
+ListenAI:/$ [2K[36;22mI/lisa-ws         [10:56:07.154 1 ws_send] websocket thread waiting for connect sem[0m
+ListenAI:/$ [2K[36;22mI/lsc_core        [10:56:07.156 1 voice.ebus] lsc connect[0m
+ListenAI:/$ [2K[36;22mI/lsc_conn        [10:56:07.156 1 voice.ebus] [conn_auth] dev_id:6d7b101a1f1dcba5 pro_id:ff75f3fc-65d9-468f-91af-f616ec44e66e ser_id:94383c05-a1d8-4e5f-9046-b83c6f21df02 extra:NULL[0m
+ListenAI:/$ [2K[36;22mI/sal_socket      [10:56:07.156 1 voice.ebus] 1154, sal_socket, 0---
+ListenAI:/$ [2K[0m
+ListenAI:/$ [2K[36;22mI/lsc_conn        [10:56:07.211 1 voice.ebus] reqbody: {"productId": "ff75f3fc-65d9-468f-91af-f616ec44e66e","deviceId": "6d7b101a1f1dcba5","curtime": 1792810568, "checksum": "88ba2f1c2c905cfbba90ef440a01dbfc"}
+ListenAI:/$ [2K[0m
+ListenAI:/$ [2Ktcp_alloc 0x285a9b00
+
+[36;22mI/sal_socket      [10:56:07.212 1 voice.ebus] 1154, sal_socket, 0---
+ListenAI:/$ [2K[0m
+ListenAI:/$ [2K[36;22mI/lsc_core        [10:56:07.385 1 voice.ebus] [lsc_update_token] (size=397)token:eyJhbGciOiJIUzM4NCIsInR5cCI6IkpXVCJ9.eyJkZXZpY2VJZCI6IjZkN2IxMDFhMWYxZGNiYTUiLCJleHAiOjE3OTU0MDI1NjgsImlhdCI6MTc5MjgxMDU2OCwiaXNzIjoiVUFKd3RPYXV0aFNlcnZpY2UiLCJqdGkiOiI2MDI3NGU5Yy0wNTc5LTQ3YzMtODQxZC0wYjg4ZDhmZmUxMzMiLCJuYmYiOjE3OTI4MTA1NjgsInByb2R1Y3RJZCI6ImZmNzVmM2ZjLTY1ZDktNDY4Zi05MWFmLWY2MTZlYzQ0ZTY2ZSIsInN1YiI6InN1YmplY3QifQ.Is8POx0Gv2Sl7ErwJCPq7D0Q_eVwopi-htH74r1fmuhhFqUGPXCi53OHLKNvgDk8[0m
+ListenAI:/$ [2K[36;22mI/voice.cloud     [10:56:07.385 1 voice.ebus] lsc_event_cb, evt:16[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:07.385 1 voice.ebus] ebus msg send, chn:0x2845f01c, evt:589830[0m
+ListenAI:/$ [2K[36;22mI/lsc_conn        [10:56:07.386 1 voice.ebus] update auth header: 
+ListenAI:/$ [2KAuthorization: Bearer eyJhbGciOiJIUzM4NCIsInR5cCI6IkpXVCJ9.eyJkZXZpY2VJZCI6IjZkN2IxMDFhMWYxZGNiYTUiLCJleHAiOjE3OTU0MDI1NjgsImlhdCI6MTc5MjgxMDU2OCwiaXNzIjoiVUFKd3RPYXV0aFNlcnZpY2UiLCJqdGkiOiI2MDI3NGU5Yy0wNTc5LTQ3YzMtODQxZC0wYjg4ZDhmZmUxMzMiLCJuYmYiOjE3OTI4MTA1NjgsInByb2R1Y3RJZCI6ImZmNzVmM2ZjLTY1ZDktNDY4Zi05MWFmLWY2MTZlYzQ0ZTY2ZSIsInN1YiI6InN1YmplY3QifQ.Is8POx0Gv2Sl7ErwJCPq7D0Q_eVwopi-htH74r1fmuhhFqUGPXCi53OHLKNvgDk8[0m
+ListenAI:/$ [2K[36;22mI/lsc_conn        [10:56:07.388 1 voice.ebus] params: {"scene":"main","mcp":true,"tool_protocol_version":"v2","type":"fullduplex","firmware_info":{"type":"arcs-mini","version":"3.0.3"}}[0m
+ListenAI:/$ [2K[36;22mI/lsc_conn        [10:56:07.388 1 voice.ebus] ------wsurl: /v1/interaction?param=eyJzY2VuZSI6Im1haW4iLCJtY3AiOnRydWUsInRvb2xfcHJvdG9jb2xfdmVyc2lvbiI6InYyIiwidHlwZSI6ImZ1bGxkdXBsZXgiLCJmaXJtd2FyZV9pbmZvIjp7InR5cGUiOiJhcmNzLW1pbmkiLCJ2ZXJzaW9uIjoiMy4wLjMifX0=[0m
+ListenAI:/$ [2K[36;22mI/lsc_conn        [10:56:07.389 1 voice.ebus] device mode: 0, host: api.listenai.com[0m
+ListenAI:/$ [2K[36;22mI/lisa-ws         [10:56:07.389 1 ws_send] Got connect signal[0m
+ListenAI:/$ [2K[36;22mI/lsc_conn        [10:56:07.389 1 ws_send] [_ws_event_cb] evt:3[0m
+ListenAI:/$ [2K[36;22mI/voice.cloud     [10:56:07.389 1 ws_send] lsc_event_cb, evt:2[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:07.389 1 ws_send] ebus msg send, chn:0x2845f01c, evt:589824[0m
+ListenAI:/$ [2Ktcp_alloc 0x285a7ee0
+
+[36;22mI/sal_socket      [10:56:07.390 1 ws_send] 1154, sal_socket, 0---
+ListenAI:/$ [2K[0m
+ListenAI:/$ [2K[33;22mW/ebus.core       [10:56:07.392 1 voice.ebus] event bus performance monitor, event 983046 exec elapsed time: 241/20 ms, cb:0x30651dde[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:07.393 1 voice.ebus] ebus msg received, chn:0x2845f01c, evt:589830[0m
+ListenAI:/$ [2K[33;22mW/app.datas       [10:56:07.393 1 voice.ebus] Attempting to access app data in a dangerous thread. Caller: 0x306b794c, current thread:voice.ebus, safety thread: main[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:07.394 1 voice.ebus] ebus msg received, chn:0x2845f01c, evt:589824[0m
+ListenAI:/$ [2K[36;22mI/service_alarm   [10:56:07.395 1 alarm_sync] syncing alarms from cloud...[0m
+ListenAI:/$ [2K[36;22mI/alarm_api       [10:56:07.395 1 alarm_sync] ========== Starting Alarm Sync from Cloud ==========[0m
+ListenAI:/$ [2K[31;22mE/NO_TAG          [10:56:07.396 1 alarm_sync] lisa_kv_get_small_data(key: user.device_mode) fail, old_len is 0[0m
+ListenAI:/$ [2K[36;22mI/lsc_core        [10:56:07.397 1 alarm_sync] 获取到LSC JWT令牌，长度: 396[0m
+ListenAI:/$ [2K[33;22mW/app.datas       [10:56:07.397 1 alarm_sync] Attempting to access app data in a dangerous thread. Caller: 0x3065684a, current thread:alarm_sync, safety thread: main[0m
+ListenAI:/$ [2K[36;22mI/alarm_api       [10:56:07.397 1 alarm_sync] ========== Alarm Sync Request ==========[0m
+ListenAI:[2K[31;22mE/NO_TAG          [10:56:07.437 1 sd_init] lisa_kv_get_blob fail(key: sd.card.cid), old_len is 0[0m
+ListenAI:/$ [2K[31;22mE/NO_TAG          [10:56:07.439 1 sd_init] lisa_kv_get_blob fail(key: sd.card.stamp), old_len is 0[0m
+ListenAI:/$ [2K[36;22mI/sd_music        [10:56:07.439 1 sd_init] 上电无卡 + 无历史 SD KV，无事发生[0m
+ListenAI:/$ [2K[36;22mI/sd_music        [10:56:07.439 1 sd_init] SD 卡启动状态处理完成: ret=0, card_ready=0[0m
+ListenAI:/$ [2K[36;22mI/sd_music        [10:56:07.441 1 sd_poll] 轮询线程已启动（初始无卡，间隔=1000ms，防抖=2次，退避=3周期）[0m
+ListenAI:/$ [2K[36;22mI/lsc_conn        [10:56:08.517 1 ws_send] [_ws_event_cb] evt:2[0m
+ListenAI:/$ [2K[36;22mI/lsc_conn        [10:56:08.538 1 ws_send] ws data: 81, {"action":"connected","cid":"ac417111a5eb","code":"0","data":"","desc":"success"}[0m
+ListenAI:/$ [2K[36;22mI/voice.cloud     [10:56:08.538 1 ws_send] lsc_event_cb, evt:1[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:08.539 1 ws_send] ebus msg send, chn:0x2845f01c, evt:589825[0m
+ListenAI:/$ [2K[36;22mI/voice.cloud     [10:56:08.539 1 ws_send] lsc_event_cb, evt:32[0m
+ListenAI:/$ [2K[33;22mW/sessions_core   [10:56:08.539 1 ws_send] no request id[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:08.541 1 voice.ebus] ebus msg received, chn:0x2845f01c, evt:589825[0m
+ListenAI:/$ [2K[36;22mI/NO_TAG          [10:56:08.541 1 voice.ebus] voice_cloud_connected[0m
+ListenAI:/$ [2K[33;22mW/app.datas       [10:56:08.541 1 voice.ebus] Attempting to access app data in a dangerous thread. Caller: 0x3065120e, current thread:voice.ebus, safety thread: main[0m
+ListenAI:/$ [2Ktcp_alloc 0x285e08a0
+
+[36;22mI/sal_socket      [10:56:08.542 1 voice.ebus] 1154, sal_socket, 2---
+ListenAI:/$ [2K[0m
+ListenAI:/$ [2K[36;22mI/lsc_conn        [10:56:08.561 1 ws_send] ws data: 725, {"action":"mcp","cid":"ac417111a5eb","sid":"8b87fbf7d156463bafbf2c5d8a0d0a85","code":"0","data":{"method":"initialize","id":"719900ed131e468d954fb65dd5efeced","params":{"protocolVersion":"2024-11-05","capabilities":{"vision":{"url":"https://api.listenai.com/v1/xiaoling/vision/explain?t=xiaoling","token":"eyJhbGciOiJIUzM4NCIsInR5cCI6IkpXVCJ9.eyJkZXZpY2VJZCI6IjZkN2IxMDFhMWYxZGNiYTUiLCJleHAiOjE3OTU0MDI1NjgsImlhdCI6MTc5MjgxMDU2OCwiaXNzIjoiVUFKd3RPYXV0aFNlcnZpY2UiLCJqdGkiOiI2MDI3NGU5Yy0wNTc5LTQ3YzMtODQxZC0wYjg4ZDhmZmUxMzMiLCJuYmYiOjE3OTI4MTA1NjgsInByb2R1Y3RJZCI6ImZmNzVmM2ZjLTY1ZDktNDY4Zi05MWFmLWY2MTZlYzQ0ZTY2ZSIsInN1YiI6InN1YmplY3QifQ.Is8POx0Gv2Sl7ErwJCPq7D0Q_eVwopi-htH74r1fmuhhFqUGPXCi53OHLKNvgDk8"}}}},"desc":"success"}[0m
+ListenAI:/$ [2K[36;22mI/voice.cloud     [10:56:08.561 1 ws_send] lsc_event_cb, evt:32[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:08.562 1 ws_send] ebus msg send, chn:0x2845f01c, evt:589842[0m
+ListenAI:/$ [2K[33;22mW/sessions_core   [10:56:08.562 1 ws_send] no request id[0m
+ListenAI:/$ [2K[36;22mI/battery         [10:56:08.579 1 OSTMR] ch32 adc raw: dev=exadc, ch=2, raw=702[0m
+ListenAI:/$ [2K[36;22mI/alarm_api       [10:56:08.605 1 alarm_sync] HTTP request completed, err=0[0m[2K[31;22mE/NO_TAG          [10:56:08.607 1 alarm_sync] lisa_kv_get_blob fail(key: user.alarm_list), old_len is 0[0m
+ListenAI:/$ [2K[36;22mI/alarm_api       [10:56:08.607 1 alarm_sync] syncing alarms: local=0, cloud=0[0m
+ListenAI:/$ [2K[36;22mI/alarm_api       [10:56:08.608 1 alarm_sync] alarm sync completed[0m
+ListenAI:/$ [2K[36;22mI/service_alarm   [10:56:08.608 1 alarm_sync] alarm sync completed successfully[0m
+ListenAI:/$ [2K[36;22mI/alarm_handler   [10:56:08.608 1 alarm_sync] alarm work task created[0m
+ListenAI:/$ [2K[36;22mI/lsc_core        [10:56:08.765 1 voice.ebus] lsc music active, http on data:{"code":400,"msg":"激活失败"}[0m
+ListenAI:/$ [2K[31;22mE/lsc_core        [10:56:08.765 1 voice.ebus] lsc music active faild!!!![0m
+ListenAI:/$ [2K[33;22mW/ebus.core       [10:56:08.767 1 voice.ebus] event bus performance monitor, event 589825 exec elapsed time: 226/20 ms, cb:0x306511e2[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:08.768 1 voice.ebus] ebus msg received, chn:0x2845f01c, evt:589842[0m
+ListenAI:/$ [2K[36;22mI/voice.cloud     [10:56:08.768 1 voice.ebus] MCP message received: {"method":"initialize","id":"719900ed131e468d954fb65dd5efeced","params":{"protocolVersion":"2024-11-05","capabilities":{"vision":{"url":"https://api.listenai.com/v1/xiaoling/vision/explain?t=xiaoling","token":"eyJhbGciOiJIUzM4NCIsInR5cCI6IkpXVCJ9.eyJkZXZpY2VJZCI6IjZkN2IxMDFhMWYxZGNiYTUiLCJleHAiOjE3OTU0MDI1NjgsImlhdCI6MTc5MjgxMDU2OCwiaXNzIjoiVUFKd3RPYXV0aFNlcnZpY2UiLCJqdGkiOiI2MDI3NGU5Yy0wNTc5LTQ3YzMtODQxZC0wYjg4ZDhmZmUxMzMiLCJuYmYiOjE3OTI4MTA1NjgsInByb2R1Y3RJZCI6ImZmNzVmM2ZjLTY1ZDktNDY4Zi05MWFmLWY2MTZlYzQ0ZTY2ZSIsInN1YiI6InN1YmplY3QifQ.Is8POx0Gv2Sl7ErwJCPq7D0Q_eVwopi-htH74r1fmuhhFqUGPXCi53OHLKNvgDk8"}}}}[0m
+ListenAI:/$ [2K[36;22mI/voice.cloud     [10:56:08.769 1 voice.ebus] MCP response: {"method":"initialize","id":"719900ed131e468d954fb65dd5efeced","result":{"capabilities":{"tools":{"count":24,"categories":["system","device","utility"]}},"serverInfo":{"name":"arcs-mini","version":"1.0.0"},"instructions":"设备端MCP服务，提供系统信息查询、设备控制等工具调用功能"},"action":"mcp"}[0m
+ListenAI:/$ [2K[31;22mE/NO_TAG          [10:56:08.777 1 alarm_sync] lisa_kv_get_blob fail(key: user.alarm_list), old_len is 0[0m
+ListenAI:/$ [2K[36;22mI/alarm           [10:56:08.778 1 alarm_sync] alarm init complete, count:0[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:08.778 1 alarm_sync] ebus msg send, chn:0x2845f01c, evt:786437[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:08.778 1 voice.ebus] ebus msg received, chn:0x2845f01c, evt:786437[0m
+ListenAI:/$ [2K[36;22mI/service_alarm   [10:56:08.778 1 alarm_sync] service_alarm_init publish alarm count: 0[0m
+ListenAI:/$ [2K[36;22mI/lsc_conn        [10:56:08.837 1 ws_send] ws data: 200, {"action":"mcp","cid":"ac417111a5eb","sid":"8b87fbf7d156463bafbf2c5d8a0d0a85","code":"0","desc":"success","data":{"id":"f12f9d62428446c18be64b2ba250b396","method":"tools/list","params":{"cursor":""}}}[0m
+ListenAI:/$ [2K[36;22mI/voice.cloud     [10:56:08.837 1 ws_send] lsc_event_cb, evt:32[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:08.838 1 ws_send] ebus msg send, chn:0x2845f01c, evt:589842[0m
+ListenAI:/$ [2K[33;22mW/sessions_core   [10:56:08.838 1 ws_send] no request id[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:08.839 1 voice.ebus] ebus msg received, chn:0x2845f01c, evt:589842[0m
+ListenAI:/$ [2K[36;22mI/voice.cloud     [10:56:08.840 1 voice.ebus] MCP message received: {"id":"f12f9d62428446c18be64b2ba250b396","method":"tools/list","params":{"cursor":""}}[0m
+ListenAI:/$ [2K[36;22mI/NO_TAG          [10:56:08.841 1 voice.ebus] mcp tool: ls.built_in.set_emotion[0m
+ListenAI:/$ [2K[36;22mI/NO_TAG          [10:56:[2K[36;22mI/voice.cloud     [10:56:08.892 1 voice.ebus] MCP response: {"method":"tools/list","id":"f12f9d62428446c18be64b2ba250b396","result":{"tools":[{"name":"ls.built_in.set_emotion","description":"待机, 充电, 聆听, 说话, 休眠, 等待, 开心, 伤心, 生气, 大笑","inputSchema":{"type":"object","properties":{"emotion":{"description":"表情类型，可以是 '待机'、'充电'、'聆听'、'说话'、'休眠'、'等待'、'开心'、'伤心'、'生气'、'大笑'","type":"string"}},"required":["emotion"],"additionalProperties":"false"}},{"name":"ls.built_in.model_persona_update","description":"修改大模型设置或者更新助手人设配置","inputSchema":{"type":"object","properties":{},"required":[]}},{"name":"ls.built_in.show_qrcode","description":"Display QR code","inputSchema":{"type":"object","properties":{"url":{"type":"string","description":"QR code URL"},"message":{"type":"string","description":"Text message"},"err_code":{"type":"string","description":"Error code"}},"required[ListenAI:/$ [2K0m
+ListenAI:/$ [2K[36;22mI/lisa-ws         [10:56:08.894 1 ws_send] text msg too large, len:15287, fragment send[0m
+ListenAI:/$ [2K[33;22mW/ebus.core       [10:56:08.906 1 voice.ebus] event bus performance monitor, event 589842 exec elapsed time: 66/20 ms, cb:0x306658de[0m
+ListenAI:/$ [2K[36;22mI/lsc_conn        [10:56:08.184 1 ws_send] ws data: 736, {"action":"result","data":{"theme":{"frontend":{"banner":{"interval_ms":30000,"resources":[{"text":"#唤醒词#，我今天的运势怎么样"},{"text":"#唤醒词#，给我讲讲武当的事儿呗"},{"text":"#唤醒词#，我今天好累呀"}]}}},"ttsProperties":{"vcn":"s_volc_zh_male_beijingxiaoye_moon_bigtts","speed":50,"volume":50},"version":"1.0","sub":"setting","update_strategy":"full","mp_guide":{"description":"小程序引导","role_config":{"description":"角色配置页","image_url":"https://cdn.iflyos.cn/public/xiaoling/qr/a0f4eb4fdb4ce65ac072e45a4e9bdd4b.jpg?x-oss-process=image/resize,m_pad,w_200,limit_0,color_000000/quality,q_100/format,jpg","text":"请用微信扫码进行配置"}}},"pushup":true,"from":"pushup"}[0m
+ListenAI:/$ [2K[36;22mI/voice.cloud     [10:56:08.185 1 ws_send] lsc_event_cb, evt:32[0m
+ListenAI:/$ [2K[36;22mI/voice.cloud     [10:56:08.186 1 ws_send] push msg process[0m
+ListenAI:/$ [2K[36;22mI/voice.cloud     [10:56:08.186 1 ws_send] cloud role setting qrcode url: https://cdn.iflyos.cn/public/xiaoling/qr/a0f4eb4fdb4ce65ac072e45a4e9bdd4b.jpg?x-oss-process=image/resize,m_pad,w_200,limit_0,color_000000/quality,q_100/format,jpg[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:08.186 1 ws_send] ebus msg send, chn:0x2845f01c, evt:589857[0m
+ListenAI:/$ [2K[36;22mI/voice.cloud     [10:56:08.187 1 ws_send] cloud standby texts banner: {"interval_ms":30000,"resources":[{"text":"#唤醒词#，我今天的运势怎么样"},{"text":"#唤醒词#，给我讲讲武当的事儿呗"},{"text":"#唤醒词#，我今天好累呀"}]}[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:08.187 1 ws_send] ebus msg send, chn:0x2845f01c, evt:589860[0m
+ListenAI:/$ [2K[33;22mW/sessions_core   [10:56:08.187 1 ws_send] no request id[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:08.189 1 voice.ebus] ebus msg received, chn:0x2845f01c, evt:589857[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:08.189 1 voice.ebus] ebus msg received, chn:0x2845f01c, evt:589860[0m
+ListenAI:/$ [2K[36;22mI/NO_TAG          [10:56:08.190 1 voice.ebus] Standby texts banner received: {"interval_ms":30000,"resources":[{"text":"#唤醒词#，我今天的运势怎么样"},{"text":"#唤醒词#，给我讲讲武当的事儿呗"},{"text":"#唤醒词#，我今天好累呀"}]}[0m
+ListenAI:/$ [2K[36;22mI/model_qrcode    [10:56:08.199 1 worq.ui] Modified URL: https://cdn.iflyos.cn/public/xiaoling/qr/a0f4eb4fdb4ce65ac072e45a4e9bdd4b.jpg?x-oss-process=image/resize,m_pad,w_200,limit_0,color_000000/quality,q_100/format,jpg -> https://cdn.iflyos.cn/public/xiaoling/qr/a0f4eb4fdb4ce65ac072e45a4e9bdd4b.jpg?x-oss-process=image/resize,m_pad,w_148,limit_0,color_000000/quality,q_100/format,jpg[0m
+ListenAI:/$ [2K[36;22mI/NO_TAG          [10[2K[33;22mW/sessions_core   [10:56:08.229 1 ws_send] no request id[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:08.236 1 voice.ebus] ebus msg received, chn:0x2845f01c, evt:589842[0m
+ListenAI:/$ [2K[36;22mI/voice.cloud     [10:56:08.236 1 voice.ebus] MCP message received: {"jsonrpc":"2.0","method":"tools/call","id":"ea9e7952-8764-4035-8929-a57c134dddf7","params":{"name":"ls.built_in.switch_full_duplex_v2","arguments":{"mode":"duplex_no_interrupt"}}}[0m
+ListenAI:/$ [2K[36;22mI/NO_TAG          [10:56:08.264 1 voice.ebus] switch interaction mode -> 1[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:08.266 1 voice.ebus] ebus msg send, chn:0x2845f01c, evt:131073[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:08.294 1 voice.ebus] ebus msg send, chn:0x2845f01c, evt:589853[0m
+ListenAI:/$ [2K[36;22mI/voice.cloud     [10:56:08.294 1 voice.ebus] MCP response: {"method":"tools/call","id":"ea9e7952-8764-4035-8929-a57c134dddf7","result":{"tool":"ls.built_in.switch_full_duplex_v2","content":[{"type":"text","text":"已切换到全双工不可打断模式"}],"isError":false},"action":"mcp"}[0m
+ListenAI:/$ [2K[33;22mW/ebus.core       [10:56:08.327 1 voice.ebus] event bus performance monitor, event 589842 exec elapsed time: 91/20 ms, cb:0x306658de[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:08.327 1 voice.ebus] ebus msg received, chn:0x2845f01c, evt:131073[0m
+ListenAI:/$ [2K[36;22mI/NO_TAG          [10:56:08.328 1 voice.ebus] voice invoke, worker: 0x30672ba8, data: 0x20039e50, len: 4[0m
+ListenAI:/$ [2K[33;22mW/app.datas       [10:56:08.328 1 voice.ebus] Attempting to access app data in a dangerous thread. Caller: 0x30672bbc, current thread:voice.ebus, safety thread: main[0m
+ListenAI:/$ [2K[36;22mI/voice.cloud     [10:56:08.329 1 voice.ebus] voice pcm send disable[0m
+ListenAI:/$ [2K[36;22mI/NO_TAG          [10:56:08.331 1 voice.ebus] save voice work mode: 1[0m
+ListenAI:/$ [2K[33;22mW/app.datas       [10:56:08.333 1 voice.ebus] Attempting to access app [2K[36;22mI/voice.cloud     [10:56:08.334 1 voice.ebus] voice pcm send disable[0m
+ListenAI:/$ [2K[36;22mI/voice.cloud     [10:56:08.336 1 voice.ebus] upload audio paused and buffer cleared[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:08.336 1 voice.ebus] ebus msg send, chn:0x2845f01c, evt:589833[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:08.336 1 voice.ebus] ebus msg received, chn:0x2845f01c, evt:589833[0m
+ListenAI:/$ [2K[36;22mI/NO_TAG          [10:56:08.337 1 voice.ebus] voice_cloud_session_finished, stop idle timer and mark session inactive[0m
+ListenAI:/$ [2K[33;22mW/app.datas       [10:56:08.337 1 voice.ebus] Attempting to access app data in a dangerous thread. Caller: 0x306501ca, current thread:voice.ebus, safety thread: main[0m
+ListenAI:/$ [2K[33;22mW/app.datas       [10:56:08.337 1 voice.ebus] Attempting to access app data in a dangerous thread. Caller: 0x3065221a, current thread:voice.ebus, safety thread: main[0m
+ListenAI:/$ [2K[33;22mW/app.datas       [10:56:08.338 1 voice.ebus] Attempting to access app data in a dangerous thread. Caller: 0x3064e0ca, current thread:voice.ebus, safety thread: main[0m
+ListenAI:/$ [2K[36;22mI/recognize.cmd.msg [10:56:08.338 1 voice.ebus] recognize_status_msg_combine_pub status: 0, from type: ONLINE[0m
+ListenAI:/$ [2K[36;22mI/NO_TAG          [10:56:08.340 1 worq.ui] Audio recognition stopped on session finished[0m
+ListenAI:/$ [2K[36;22mI/NO_TAG          [10:56:08.340 1 worq.ui] Session finished, tts_playing=0, tts_pending=0[0m
+ListenAI:/$ [2K[36;22mI/NO_TAG          [10:56:08.340 1 worq.ui] on finished, speaking: 0, wakeup mode: 2[0m
+ListenAI:/$ [2K[36;22mI/NO_TAG          [10:56:08.340 1 worq.ui] on finished, single mode, check speaking status after 1000ms[0m
+ListenAI:/$ [2Ktcp_alloc 0x285e0da0
+
+[36;22mI/sal_socket      [10:56:08.341 1 qr_download] 1154, sal_socket, 1---
+ListenAI:/$ [2K[0m
+ListenAI:/$ [2K[36;22mI/battery         [10:56:09.580 1 OSTMR] ch32 adc raw: dev=exadc, ch=2, raw=7[2K[36;22mI/model_qrcode    [10:56:09.729 1 qr_download] QR code download completed successfully: 16608 bytes, 0x285e5f08[0m
+ListenAI:/$ [2K[36;22mI/model_qrcode    [10:56:09.731 1 worq.ui] set role setting qrcode, img:0x285e5f08, size: 16608[0m
+ListenAI:/$ [2K[36;22mI/NO_TAG          [10:56:09.340 1 worq.ui] finished_tiemr_callback, speaking: 0[0m
+ListenAI:/$ [2K[36;22mI/NO_TAG          [10:56:09.340 1 worq.ui] enter_standby[0m
+ListenAI:/$ [2K[36;22mI/voice_player_tone [10:56:09.451 1 tone_play] tone command received: source=0[0m
+ListenAI:/$ [2K[36;22mI/voice_player_tone [10:56:09.451 1 tone_play] tone start: source=0 prompt=0 url=mem://addr=806378224size=9288[0m
+ListenAI:/$ [2K[36;22mI/APP_PLAYER      [10:56:09.451 1 tone_play] Play ex: tone, url=mem://addr=806378224size=9288, throw_time=0[0m
+ListenAI:/$ [2K[36;22mI/APP_PLAYER_FOCUS [10:56:09.451 1 tone_play] Acquiring audio focus for player tone[0m
+ListenAI:/$ [2K[36;22mI/audiomgr        [10:56:09.451 1 tone_play] Channel acquire: id=0, name=tone[0m
+ListenAI:/$ [2K[36;22mI/audiomgr        [10:56:09.451 1 tone_play] Channel focus: id=0, state=FOREGROUND, by_which=tone[0m
+ListenAI:/$ [2K[36;22mI/APP_PLAYER_FOCUS [10:56:09.453 1 tone_play] Player[0] tone focus change: NONE -> FOREGROUND (by tone)[0m
+ListenAI:/$ [2K[36;22mI/APP_PLAYER_CORE [10:56:09.453 1 tone_play] Core play: tone, url=mem://addr=806378224size=9288, throw_time=0[0m
+ListenAI:/$ [2K[36;22mI/APP_PLAYER_CORE [10:56:09.485 1 player_td] Core callback: Player[0] tone evt=1[0m
+ListenAI:/$ [2K[36;22mI/PA_MGR          [10:56:09.485 1 player_td] PA ON request (ref_count: 0->1, caller:0x307cc424)[0m
+ListenAI:/$ [2K[36;22mI/voice_player_comm [10:56:09.485 1 player_td] PA ON via exmcu mute[0m
+ListenAI:/$ [2K[36;22mI/PA_MGR          [10:56:09.486 1 player_td] PA turned ON (first instance)[0m
+ListenAI:/$ [2K[36;22mI/APP_PLAYER      [10:56:09.486 1 player_td] Player[0] tone: PA acquired before audio output[0m
+ListenAI:/$ [2K[36;22mI/APP_PLAYER      [10:56:09.486 1 player_td] App callback: Player[0] tone evt=1, notify_user=1[0m
+ListenAI:/$ [2K[33;22mW/lisa_player_adapter [10:56:09.490 1 pcm_play] Audio is not in IDLE state (current: 1), skip config and start[0m
+ListenAI:/$ [2K[36;22mI/APP_PLAYER_CORE [10:56:09.496 1 player_td] Core callback: Player[0] tone evt=2[0m
+ListenAI:/$ [2K[36[2K[36;22mI/APP_PLAYER      [10:56:09.496 1 player_td] Player[0] tone: PLAYING but PA already on, skip[0m
+ListenAI:/$ [2K[36;22mI/APP_PLAYER      [10:56:10.551 1 tone_play] Play started: tone[0m
+ListenAI:/$ [2K[36;22mI/voice_player_tone [10:56:10.551 1 tone_play] tone start accepted: source=0[0m
+ListenAI:/$ [2K[36;22mI/voice_player_tone [10:56:10.688 1 cb_tone] tone event: event=1 state=1 source=0[0m
+ListenAI:/$ [2K[36;22mI/voice_player_tone [10:56:10.689 1 cb_tone] tone event: event=2 state=1 source=0[0m
+ListenAI:/$ [2K[36;22mI/voice_player_tone [10:56:10.762 1 OSTMR] tone command queued: source=0 url=mem://addr=806378224size=9288[0m
+ListenAI:/$ [2K[36;22mI/battery         [10:56:10.765 1 OSTMR] ch32 adc raw: dev=exadc, ch=2, raw=716[0m
+ListenAI:/$ [2K[48;5;239m[36;22m[ap][36;22mI/wakeup          [00:00:07.426 0 acomp_workqueue] VAD gate open: energy=4327 threshold=348 noise=124[0m
+ListenAI:/$ [2K[0m[48;5;239m[36;22m[ap][36;22mI/wakeup_algo     [00:00:07.497 0 acomp_workqueue] counter_avg=119.80(M/S), cnt_part=191678806[0m
+ListenAI:/$ [2K[0mListenAI:/$ [2K[36;22mI/battery         [10:56:11.801 1 OSTMR] ch32 adc raw: dev=exadc, ch=2, raw=716[0m
+ListenAI:/$ [2K[36;22mI/APP_PLAYER_CORE [10:56:11.896 1 player_td] Core callback: Player[0] tone evt=6[0m
+ListenAI:/$ [2K[36;22mI/APP_PLAYER_CORE [10:56:11.896 1 player_td] Core: Player tone paused, releasing pause_sem[0m
+ListenAI:/$ [2K[36;22mI/APP_PLAYER      [10:56:11.896 1 player_td] App callback: Player[0] tone evt=6, notify_user=1[0m
+ListenAI:/$ [2K[36;22mI/APP_PLAYER      [10:56:11.896 1 player_td] Player[0] tone: evt=6 -> PA OFF (delayed 1000ms)[0m
+ListenAI:/$ [2K[36;22mI/PA_MGR          [10:56:11.896 1 player_td] PA OFF request (ref_count: 1->0, caller:0x307cc498)[0m
+ListenAI:/$ [2K[36;22mI/PA_MGR          [10:56:11.897 1 player_td] PA will turn OFF after 1000 ms (last instance)[0m
+ListenAI:/$ [2K[36;22mI/APP_PLAYER      [10:56:11.897 1 player_td] Releasing audio focus for player tone (evt=6, user_initiated=0)[0m
+ListenAI:/$ [2K[36;22mI/APP_PLAYER_FOCUS [10:56:11.897 1 player_td] Releasing audio focus for player tone (user_initiated=0)[0m
+ListenAI:/$ [2K[36;22mI/audiomgr        [10:56:11.897 1 player_td] Channel release: id=0[0m
+ListenAI:/$ [2K[36;22mI/audiomgr        [10:56:11.897 1 player_td] Channel focus: id=0, state=NONE, by_which=tone[0m
+ListenAI:/$ [2K[36;22mI/APP_PLAYER_FOCUS [10:56:11.897 1 player_td] Player[0] tone focus change: FOREGROUND -> NONE (by tone)[0m
+ListenAI:/$ [2K[36;22mI/APP_PLAYER_FOCUS [10:56:11.897 1 player_td] Player tone: skip focus policy (self-triggered focus change)[0m
+ListenAI:/$ [2K[36;22mI/voice_player_tone [10:56:11.898 1 cb_tone] tone event: event=5 state=1 source=0[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:11.898 1 cb_tone] ebus msg send, chn:0x2845f01c, evt:655367[0m
+ListenAI:/$ [2K[36;22mI/ebus.core       [10:56:11.898 1 voice.ebus] ebus msg received, chn:0x2845f01c, evt:655367[0m
+ListenAI:/$ [2K[48;5;239m[36;22m[ap][36;22mI/wakeup_algo     [00:00:08.780 0 acomp_workqueue] counter_avg=129.21(M/S), cnt_part=206728917[0m
+ListenAI:/$ [2K[0mListenAI:/$ [2K[36;22mI/battery         [10:56:12.802 1 OSTMR] ch32 adc raw: dev=exadc, ch=2, raw=712[0m
+ListenAI:/$ [2K[36;22mI/voice_player_comm [10:56:12.897 1 OSTMR] PA OFF via exmcu mute[0m
+ListenAI:/$ [2K[36;22mI/PA_MGR          [10:56:12.898 1 OSTMR] PA OFF (delayed)[0m
+ListenAI:/$ [2K[48;5;239m[36;22m[ap][36;22mI/wakeup_algo     [00:00:10.374 0 acomp_workqueue] counter_avg=129.90(M/S), cnt_part=207832441[0m
+ListenAI:/$ [2K[0mListenAI:/$ [2K[48;5;239m[36;22m[ap][36;22mI/wakeup          [00:00:10.401 0 acomp_workqueue] VAD gate closed: noise=132[0m
+ListenAI:/$ [2K[0mListenAI:/$ [2K[36;22mI/battery         [10:56:13.803 1 OSTMR] ch32 adc raw: dev=exadc, ch=2, raw=725[0m
+ListenAI:/$ [2K[36;22mI/battery         [10:56:14.806 1 OSTMR] ch32 adc raw: dev=exadc, ch=2, raw=712[0m
+ListenAI:/$ [2K[36;22mI/battery         [10:56:15.808 1 OSTMR] ch32 adc raw: dev=exadc, ch=2, raw=724[0m
+ListenAI:/$ [2K[36;22mI/battery         [10:56:16.809 1 OSTMR] ch32 adc raw: dev=exadc, ch=2, raw=702[0m
+ListenAI:/$ [2K[36;22mI/battery         [10:56:17.811 1 OSTMR] ch32 adc raw: dev=exadc, ch=2, raw=726[0m
+ListenAI:/$ [2K[36;22mI/battery         [10:56:18.812 1 OSTMR] ch32 adc raw: dev=exadc, ch=2, raw=727[0m
+ListenAI:/$ [2K[36;22mI/battery         [10:56:19.814 1 OSTMR] ch32 adc raw: dev=exadc, ch=2, raw=724[0m
+ListenAI:/$ 

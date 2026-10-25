@@ -248,6 +248,98 @@ void music_ui_toggle_mode(void)
     LOGI("mode -> %s", s_full ? "fullscreen" : "bar");
 }
 
+/* ==================== 搜索中提示 ==================== */
+
+#define SEARCH_ANIM_MS       400
+#define SEARCH_TIMEOUT_MS    15000
+
+static lv_obj_t *s_search_root;
+static lv_obj_t *s_search_label;
+static lv_timer_t *s_search_anim;
+static lv_timer_t *s_search_timeout;
+static uint8_t s_search_dots;
+
+static void search_anim_cb(lv_timer_t *timer)
+{
+    char buf[64];
+
+    (void)timer;
+
+    if (s_search_label == NULL) {
+        return;
+    }
+    s_search_dots = (uint8_t)((s_search_dots + 1) % 4);
+    snprintf(buf, sizeof(buf), "本鱼正在努力搜寻%.*s", (int)s_search_dots, "...");
+    lv_label_set_text(s_search_label, buf);
+}
+
+/* 搜索失败或服务没起来时，不能一直卡在搜索中界面 */
+static void search_timeout_cb(lv_timer_t *timer)
+{
+    (void)timer;
+
+    if (s_search_root != NULL) {
+        lv_obj_add_flag(s_search_root, LV_OBJ_FLAG_HIDDEN);
+    }
+}
+
+void music_ui_show_searching(void)
+{
+    if (s_search_root == NULL) {
+        s_search_root = lv_obj_create(lv_scr_act());
+        lv_obj_add_flag(s_search_root, LV_OBJ_FLAG_IGNORE_LAYOUT);
+        lv_obj_clear_flag(s_search_root, LV_OBJ_FLAG_SCROLLABLE);
+        lv_obj_set_size(s_search_root, SCREEN_W, SCREEN_H);
+        lv_obj_set_pos(s_search_root, 0, 0);
+        lv_obj_set_style_bg_color(s_search_root, lv_color_black(), LV_PART_MAIN);
+        lv_obj_set_style_bg_opa(s_search_root, LV_OPA_COVER, LV_PART_MAIN);
+        lv_obj_set_style_border_width(s_search_root, 0, LV_PART_MAIN);
+        lv_obj_set_style_radius(s_search_root, 0, LV_PART_MAIN);
+        lv_obj_set_style_pad_all(s_search_root, 0, LV_PART_MAIN);
+
+        s_search_label = lv_label_create(s_search_root);
+        lv_obj_add_flag(s_search_label, LV_OBJ_FLAG_IGNORE_LAYOUT);
+        lv_obj_set_size(s_search_label, SCREEN_W, 30);
+        lv_obj_set_pos(s_search_label, 0, (SCREEN_H - 30) / 2);
+        lv_obj_set_style_text_font(s_search_label, &lv_font_chinese_16, LV_PART_MAIN);
+        lv_obj_set_style_text_color(s_search_label, lv_color_white(), LV_PART_MAIN);
+        lv_obj_set_style_text_align(s_search_label, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN);
+    }
+
+    s_search_dots = 0;
+    lv_label_set_text(s_search_label, "本鱼正在努力搜寻");
+    lv_obj_clear_flag(s_search_root, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_move_foreground(s_search_root);
+
+    if (s_search_anim == NULL) {
+        s_search_anim = lv_timer_create(search_anim_cb, SEARCH_ANIM_MS, NULL);
+    }
+    if (s_search_timeout == NULL) {
+        s_search_timeout = lv_timer_create(search_timeout_cb, SEARCH_TIMEOUT_MS, NULL);
+    }
+    lv_timer_reset(s_search_anim);
+    lv_timer_reset(s_search_timeout);
+}
+
+void music_ui_hide_searching(void)
+{
+    if (s_search_root != NULL) {
+        lv_obj_add_flag(s_search_root, LV_OBJ_FLAG_HIDDEN);
+    }
+}
+
+static void music_on_searching(void *unused, uint32_t msg_id, void *data,
+                               uint32_t len, void *user_data)
+{
+    (void)unused;
+    (void)msg_id;
+    (void)data;
+    (void)len;
+    (void)user_data;
+
+    music_ui_show_searching();
+}
+
 /* ==================== 搜索结果选择列表 ==================== */
 
 #define ROW_H        40
@@ -279,6 +371,8 @@ static void list_row_paint(uint8_t i, uint8_t selected)
 void music_ui_show_list(const voice_msg_music_list_t *list)
 {
     uint8_t i;
+
+    music_ui_hide_searching();      /* 列表就绪，撤掉搜索中提示 */
 
     if (list == NULL || list->count == 0) {
         return;
@@ -388,6 +482,7 @@ static void music_on_list_show(void *unused, uint32_t msg_id, void *data,
 static int music_ui_evt_init(void)
 {
     voice_msg_sub(VOICE_MSG_APP_MUSIC_LIST_SHOW, music_on_list_show, NULL);
+    voice_msg_sub(VOICE_MSG_APP_MUSIC_SEARCHING, music_on_searching, NULL);
     voice_msg_sub(VOICE_MSG_APP_MUSIC_COVER, music_on_cover, NULL);
     return 0;
 }

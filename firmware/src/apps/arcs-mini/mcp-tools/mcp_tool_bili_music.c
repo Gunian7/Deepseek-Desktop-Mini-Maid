@@ -708,6 +708,8 @@ static void bili_on_session_finish(void *unused, uint32_t msg_id, void *data,
         LOGI("iat music intent, interrupt cloud reply");
         voice_msg_pub(VOICE_MSG_CLOUD_SESSION_INTERRUPT, NULL, 0);
         voice_msg_pub(VOICE_MSG_CLOUD_MCP_CHAT_EXIT, NULL, 0);
+        /* 搜索要 1~8 秒（PC 端在下载+转码），先让屏幕有个反馈 */
+        voice_msg_pub(VOICE_MSG_APP_MUSIC_SEARCHING, NULL, 0);
 
         bili_search_async(song);
     }

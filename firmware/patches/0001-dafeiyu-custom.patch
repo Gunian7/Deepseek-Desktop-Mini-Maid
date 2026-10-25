@@ -406,27 +406,28 @@ index dfb6d31d..be841d01 100644
 +}
 \ No newline at end of file
 diff --git a/src/framework/voice_msg.h b/src/framework/voice_msg.h
-index 2053d075..8b340815 100644
+index 2053d075..829427fd 100644
 --- a/src/framework/voice_msg.h
 +++ b/src/framework/voice_msg.h
-@@ -284,6 +284,9 @@ enum {
+@@ -284,6 +284,10 @@ enum {
  
      VOICE_MSG_APP_BATTERY_QUERY_SHOW, /* voice_msg_battery_info_t * */
      VOICE_MSG_APP_SD_MUSIC_PLAY_FAILED,
 +    VOICE_MSG_APP_MUSIC_LIST_SHOW,      /* voice_msg_music_list_t * 搜索结果列表 */
 +    VOICE_MSG_APP_MUSIC_SELECT,         /* voice_msg_music_select_t * 列表里选中的项 */
 +    VOICE_MSG_APP_MUSIC_COVER,          /* voice_msg_music_cover_t * 封面 RGB565 */
++    VOICE_MSG_APP_MUSIC_SEARCHING,      /* NULL：开始搜索，列表就绪后由 LIST_SHOW 接替 */
      VOICE_MSG_APP_MAX,
  };
  
-@@ -315,4 +318,29 @@ int voice_invoke_sync(voice_invoke_sync_worker_t worker, void *data, uint32_t le
+@@ -315,4 +319,29 @@ int voice_invoke_sync(voice_invoke_sync_worker_t worker, void *data, uint32_t le
  }
  #endif
  
 +/* ---- B 站音乐封面（LVGL 内存图片源：RGB565 + 8 字节头） ----
 + * 只传 PSRAM 指针：ebus 的 pub 会用 platform_malloc 拷贝 payload，
 + * 而 SRAM 常年 99% 占用，8KB 会直接 ENOMEM。双核共享 PSRAM，指针可直接用。 */
-+#define VOICE_MSG_MUSIC_COVER_SIZE   (64 * 64 * 4 + 8)
++#define VOICE_MSG_MUSIC_COVER_SIZE   (64 * 64 * 2 + 8)
 +
 +typedef struct {
 +    void *data;                       /* PSRAM 里的 RGB565 + 8 字节头 */

@@ -271,13 +271,14 @@ def get_cover(bvid, pic):
 
     out = bytearray()
     out += struct.pack("<I", 1 | (COVER_W << 10) | (COVER_H << 21))   # header: cf=1, w, h
-    out += struct.pack("<I", COVER_W * COVER_H * 4)                    # data_size
-    # LVGL 的 LV_COLOR_DEPTH 是 32，LV_IMG_CF_TRUE_COLOR 即 ARGB8888。
-    # lv_color_t 在 DEPTH=32 时是 union{full; struct{blue,green,red,alpha}}，
-    # 小端平台上内存顺序就是 B, G, R, A。（之前按 RGB565 输出会差一半数据，
-    # 表现为封面位置空白/花屏。）
+    out += struct.pack("<I", COVER_W * COVER_H * 2)                    # data_size
+    # 设备的 LV_COLOR_DEPTH 是 16（prj.conf: CONFIG_LV_COLOR_DEPTH=16，
+    # CONFIG_SDK_MODULE_LVGL8=y），LV_IMG_CF_TRUE_COLOR 即 RGB565，2 字节/像素。
+    # lv_color_t(DEPTH=16) 的 full = (red<<11)|(green<<5)|blue，小端低字节在前。
+    # 注意：apps-ui/portable/linux_sdl2/lv_conf.h 里是 32，那是 PC 模拟器配置，
+    # 不要看错。
     for r, g, b in img.getdata():
-        out += bytes((b, g, r, 255))
+        out += struct.pack("<H", ((r >> 3) << 11) | ((g >> 2) << 5) | (b >> 3))
 
     data = bytes(out)
     _cover_cache[bvid] = data

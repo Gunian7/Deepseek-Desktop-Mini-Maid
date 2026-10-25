@@ -482,6 +482,23 @@ static void music_on_list_show(void *unused, uint32_t msg_id, void *data,
     music_ui_show_list((const voice_msg_music_list_t *)data);
 }
 
+/* 退出音乐播放：播放条、候选列表、搜索中提示全部撤掉，动画暂停。
+ * 播放本身的停止由调用方 pub VOICE_MSG_PLAY_CONTROL_STOP 完成。 */
+void music_ui_exit(void)
+{
+    if (s_root != NULL) {
+        lv_obj_add_flag(s_root, LV_OBJ_FLAG_HIDDEN);
+        s_visible = 0;
+    }
+    if (s_list_root != NULL) {
+        lv_obj_add_flag(s_list_root, LV_OBJ_FLAG_HIDDEN);
+    }
+    if (s_cover != NULL) {
+        lv_img_set_src(s_cover, NULL);
+    }
+    music_ui_hide_searching();
+}
+
 static int music_ui_evt_init(void)
 {
     voice_msg_sub(VOICE_MSG_APP_MUSIC_LIST_SHOW, music_on_list_show, NULL);

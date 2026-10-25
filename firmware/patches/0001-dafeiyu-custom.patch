@@ -30,7 +30,7 @@ index a10afb8c..d9606dd6 100644
      lisa_ui_llm_primary_set_settings_icon_event_cb(scr_data->view, settings_btn_event_cb, scr_data);
  #endif
 diff --git a/apps/arcs-mini/button/app_button.c b/apps/arcs-mini/button/app_button.c
-index 01dd7201..c9a779f0 100644
+index 01dd7201..b243e6cc 100644
 --- a/apps/arcs-mini/button/app_button.c
 +++ b/apps/arcs-mini/button/app_button.c
 @@ -14,6 +14,8 @@
@@ -84,6 +84,29 @@ index 01dd7201..c9a779f0 100644
      button_camera_preview_handle_double_click();
  }
  
+@@ -317,11 +347,21 @@ static void app_button_exit_voice_session_for_info(void)
+     voice_intent_pop(INTENT_VOICE_SESSION);
+ }
+ 
+-/* 三击：根据当前云端状态播报提示音，并打开对应的信息或二维码页。 */
++/* 三击：退出音乐播放（列表/搜索中/播放中/暂停中都算）。
++ * 放在最前面，避免退出音乐时顺手把信息页也打开。 */
+ static void app_button_handle_triple_click(void)
+ {
+     uint32_t status = QR_STATUS_CONNECTED;
+ 
++    if (music_ui_list_active() || voice_player_music_is_active()) {
++        LISA_LOGI(TAG, "Triple click: exit music playback");
++        voice_msg_pub(VOICE_MSG_PLAY_CONTROL_STOP, NULL, 0);
++        /* 清掉主页正文区的歌名，让待机文案恢复轮播 */
++        voice_player_music_publish_info(NULL, NULL);
++        music_ui_exit();
++        return;
++    }
++
+     /* 将云端异常状态转换为未联网、未绑定等页面状态；云端正常时保持已连接状态。 */
+     (void)app_button_resolve_cloud_info_status(&status);
+     LISA_LOGI(TAG, "power button triple click, open info page");
 diff --git a/apps/arcs-mini/main.c b/apps/arcs-mini/main.c
 index c88c22bb..a2fe86a1 100644
 --- a/apps/arcs-mini/main.c

@@ -37,4 +37,7 @@ void music_ui_show_list(const voice_msg_music_list_t *list);
 /** 设置封面（LVGL 内存图片源：RGB565 + 8 字节头） */
 void music_ui_set_cover(void *data, uint32_t len);
 
+/** 退出音乐播放：撤掉播放条/候选列表/搜索中提示 */
+void music_ui_exit(void);
+
 #endif /* __MUSIC_UI_H__ */

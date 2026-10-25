@@ -57,8 +57,8 @@ static void apply_layout(void)
         lv_obj_set_pos(s_root, 0, 0);
         lv_obj_set_style_bg_opa(s_root, LV_OPA_COVER, LV_PART_MAIN);
 
-        lv_obj_set_size(s_title, SCREEN_W - 24, 90);
-        lv_obj_set_pos(s_title, 12, 46);
+        lv_obj_set_size(s_title, SCREEN_W - 24, 40);
+        lv_obj_set_pos(s_title, 12, 78);
         lv_obj_set_style_text_align(s_title, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN);
         lv_obj_clear_flag(s_title, LV_OBJ_FLAG_HIDDEN);
         lv_obj_clear_flag(s_cover, LV_OBJ_FLAG_HIDDEN);

@@ -208,16 +208,205 @@ index 09448ab5..1304d60a 100644
 +
  #endif /* VOICE_PLAYER_MUSIC_H */
 diff --git a/res/arcs-mini/emoji/emoji.json b/res/arcs-mini/emoji/emoji.json
-index dfb6d31d..4c8ebe64 100644
+index dfb6d31d..be841d01 100644
 --- a/res/arcs-mini/emoji/emoji.json
 +++ b/res/arcs-mini/emoji/emoji.json
-@@ -1 +1 @@
+@@ -1 +1,190 @@
 -{"default_emoji": "neutral", "animations": [{"name": "neutral", "alias": "待机"}, {"name": "battery", "alias": "充电"}, {"name": "wakeup", "alias": "聆听"}, {"name": "speaking", "alias": "说话"}, {"name": "sleepy", "alias": "休眠"}, {"name": "wait", "alias": "等待"}, {"name": "待机", "loop": {"path": "/待机/frame-%06d.png", "range": [0, 9], "interval_ms": 150}}, {"name": "充电", "loop": {"path": "/充电/frame-%06d.png", "range": [0, 1], "interval_ms": 100}}, {"name": "聆听", "loop": {"path": "/聆听/frame-%06d.png", "range": [0, 9], "interval_ms": 100}}, {"name": "说话", "loop": {"path": "/说话/frame-%06d.png", "range": [0, 9], "interval_ms": 100}}, {"name": "休眠", "loop": {"path": "/休眠/frame-%06d.png", "range": [0, 8], "interval_ms": 200}}, {"name": "等待", "loop": {"path": "/等待/frame-%06d.png", "range": [0, 9], "interval_ms": 150}}, {"name": "开心", "loop": {"path": "/开心/frame-%06d.png", "range": [0, 6], "interval_ms": 150}}, {"name": "伤心", "loop": {"path": "/伤心/frame-%06d.png", "range": [0, 9], "interval_ms": 200}}, {"name": "生气", "loop": {"path": "/生气/frame-%06d.png", "range": [0, 7], "interval_ms": 150}}, {"name": "大笑", "loop": {"path": "/大笑/frame-%06d.png", "range": [0, 9], "interval_ms": 100}}], "offset": {"y": 0}}
 \ No newline at end of file
-+{"default_emoji":"neutral","animations":[{"name":"neutral","alias":"待机"},{"name":"battery","alias":"充电"},{"name":"wakeup","alias":"聆听"},{"name":"speaking","alias":"说话"},{"name":"sleepy","alias":"休眠"},{"name":"wait","alias":"等待"},{"name":"待机","loop":{"path":"/待机/frame-%06d.png","range":[0,19],"interval_ms":150}},{"name":"充电","loop":{"path":"/充电/frame-%06d.png","range":[0,1],"interval_ms":100}},{"name":"聆听","loop":{"path":"/聆听/frame-%06d.png","range":[0,9],"interval_ms":100}},{"name":"说话","loop":{"path":"/说话/frame-%06d.png","range":[0,9],"interval_ms":100}},{"name":"休眠","loop":{"path":"/休眠/frame-%06d.png","range":[0,8],"interval_ms":200}},{"name":"等待","loop":{"path":"/等待/frame-%06d.png","range":[0,9],"interval_ms":150}},{"name":"开心","loop":{"path":"/开心/frame-%06d.png","range":[0,15],"interval_ms":90}},{"name":"伤心","loop":{"path":"/伤心/frame-%06d.png","range":[0,9],"interval_ms":200}},{"name":"生气","loop":{"path":"/生气/frame-%06d.png","range":[0,7],"interval_ms":150}},{"name":"大笑","loop":{"path":"/大笑/frame-%06d.png","range":[0,9],"interval_ms":100}}],"offset":{"y":0}}
++{
++ "default_emoji": "待机",
++ "animations": [
++  {
++   "name": "neutral",
++   "alias": "待机",
++   "loop": {
++    "path": "/待机/frame-%06d.png",
++    "range": [
++     0,
++     19
++    ],
++    "interval_ms": 150
++   }
++  },
++  {
++   "name": "battery",
++   "alias": "充电",
++   "loop": {
++    "path": "/充电/frame-%06d.png",
++    "range": [
++     0,
++     1
++    ],
++    "interval_ms": 100
++   }
++  },
++  {
++   "name": "wakeup",
++   "alias": "聆听",
++   "loop": {
++    "path": "/聆听/frame-%06d.png",
++    "range": [
++     0,
++     9
++    ],
++    "interval_ms": 100
++   }
++  },
++  {
++   "name": "speaking",
++   "alias": "说话",
++   "loop": {
++    "path": "/说话/frame-%06d.png",
++    "range": [
++     0,
++     9
++    ],
++    "interval_ms": 100
++   }
++  },
++  {
++   "name": "sleepy",
++   "alias": "休眠",
++   "loop": {
++    "path": "/休眠/frame-%06d.png",
++    "range": [
++     0,
++     8
++    ],
++    "interval_ms": 200
++   }
++  },
++  {
++   "name": "wait",
++   "alias": "等待",
++   "loop": {
++    "path": "/等待/frame-%06d.png",
++    "range": [
++     0,
++     9
++    ],
++    "interval_ms": 150
++   }
++  },
++  {
++   "name": "待机",
++   "loop": {
++    "path": "/待机/frame-%06d.png",
++    "range": [
++     0,
++     19
++    ],
++    "interval_ms": 150
++   }
++  },
++  {
++   "name": "充电",
++   "loop": {
++    "path": "/充电/frame-%06d.png",
++    "range": [
++     0,
++     1
++    ],
++    "interval_ms": 100
++   }
++  },
++  {
++   "name": "聆听",
++   "loop": {
++    "path": "/聆听/frame-%06d.png",
++    "range": [
++     0,
++     9
++    ],
++    "interval_ms": 100
++   }
++  },
++  {
++   "name": "说话",
++   "loop": {
++    "path": "/说话/frame-%06d.png",
++    "range": [
++     0,
++     9
++    ],
++    "interval_ms": 100
++   }
++  },
++  {
++   "name": "休眠",
++   "loop": {
++    "path": "/休眠/frame-%06d.png",
++    "range": [
++     0,
++     8
++    ],
++    "interval_ms": 200
++   }
++  },
++  {
++   "name": "等待",
++   "loop": {
++    "path": "/等待/frame-%06d.png",
++    "range": [
++     0,
++     9
++    ],
++    "interval_ms": 150
++   }
++  },
++  {
++   "name": "开心",
++   "loop": {
++    "path": "/开心/frame-%06d.png",
++    "range": [
++     0,
++     15
++    ],
++    "interval_ms": 90
++   }
++  },
++  {
++   "name": "伤心",
++   "loop": {
++    "path": "/伤心/frame-%06d.png",
++    "range": [
++     0,
++     9
++    ],
++    "interval_ms": 200
++   }
++  },
++  {
++   "name": "生气",
++   "loop": {
++    "path": "/生气/frame-%06d.png",
++    "range": [
++     0,
++     7
++    ],
++    "interval_ms": 150
++   }
++  },
++  {
++   "name": "大笑",
++   "loop": {
++    "path": "/大笑/frame-%06d.png",
++    "range": [
++     0,
++     9
++    ],
++    "interval_ms": 100
++   }
++  }
++ ],
++ "offset": {
++  "y": 0
++ }
++}
 \ No newline at end of file
 diff --git a/src/framework/voice_msg.h b/src/framework/voice_msg.h
-index 2053d075..4b27915b 100644
+index 2053d075..8b340815 100644
 --- a/src/framework/voice_msg.h
 +++ b/src/framework/voice_msg.h
 @@ -284,6 +284,9 @@ enum {
@@ -237,7 +426,7 @@ index 2053d075..4b27915b 100644
 +/* ---- B 站音乐封面（LVGL 内存图片源：RGB565 + 8 字节头） ----
 + * 只传 PSRAM 指针：ebus 的 pub 会用 platform_malloc 拷贝 payload，
 + * 而 SRAM 常年 99% 占用，8KB 会直接 ENOMEM。双核共享 PSRAM，指针可直接用。 */
-+#define VOICE_MSG_MUSIC_COVER_SIZE   (64 * 64 * 2 + 8)
++#define VOICE_MSG_MUSIC_COVER_SIZE   (64 * 64 * 4 + 8)
 +
 +typedef struct {
 +    void *data;                       /* PSRAM 里的 RGB565 + 8 字节头 */

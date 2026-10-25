@@ -22,6 +22,8 @@
 #include "mcp.h"
 #include "voice_msg.h"
 #include "async_task.h"
+#include "lisa_kv.h"
+#include "kv_user.h"
 #include "sys_init.h"
 #include "sysheap.h"
 
@@ -711,8 +713,28 @@ static void bili_on_session_finish(void *unused, uint32_t msg_id, void *data,
     }
 }
 
+/* KV 里没有设置这两个开关时补上。
+ * 之前只靠手动设置，结果 KV 丢失（重新配网后 user.brightness 都读不到）时
+ * 开关一起消失，云端 OTA 把自定义表情和自编译固件全刷回了官方版。 */
+static void bili_ensure_ota_locks(void)
+{
+    int v = 0;
+
+    if (lisa_kv_get_int(KV_KEY_USER_DISABLE_EMOJI_UPDATE, &v) != 0 || v != 1) {
+        lisa_kv_set_int(KV_KEY_USER_DISABLE_EMOJI_UPDATE, 1);
+        LOGI("ota lock: emoji update disabled");
+    }
+    v = 0;
+    if (lisa_kv_get_int(KV_KEY_USER_DISABLE_APP_UPDATE, &v) != 0 || v != 1) {
+        lisa_kv_set_int(KV_KEY_USER_DISABLE_APP_UPDATE, 1);
+        LOGI("ota lock: app update disabled");
+    }
+}
+
 static int bili_music_evt_init(void)
 {
+    bili_ensure_ota_locks();
+
     voice_msg_sub(VOICE_MSG_APP_MUSIC_SELECT, bili_select_handler, NULL);
     voice_msg_sub(VOICE_MSG_CLOUD_IAT_UPDATE, bili_on_iat_update, NULL);
     voice_msg_sub(VOICE_MSG_CLOUD_IAT_END, bili_on_session_finish, NULL);

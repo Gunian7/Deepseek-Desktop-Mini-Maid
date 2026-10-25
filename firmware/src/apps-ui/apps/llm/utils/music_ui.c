@@ -250,27 +250,30 @@ void music_ui_toggle_mode(void)
 
 /* ==================== 搜索中提示 ==================== */
 
-#define SEARCH_ANIM_MS       400
+#define SEARCH_ANIM_MS       90
 #define SEARCH_TIMEOUT_MS    15000
+#define SEARCH_FRAME_CNT     16
 
 static lv_obj_t *s_search_root;
+static lv_obj_t *s_search_img;
 static lv_obj_t *s_search_label;
 static lv_timer_t *s_search_anim;
 static lv_timer_t *s_search_timeout;
-static uint8_t s_search_dots;
+static uint8_t s_search_frame;
 
+/* 左右跑就是「开心」那组：running-right + running-left 拼接，16 帧 */
 static void search_anim_cb(lv_timer_t *timer)
 {
-    char buf[64];
+    char path[64];
 
     (void)timer;
 
-    if (s_search_label == NULL) {
+    if (s_search_img == NULL) {
         return;
     }
-    s_search_dots = (uint8_t)((s_search_dots + 1) % 4);
-    snprintf(buf, sizeof(buf), "本鱼正在努力搜寻%.*s", (int)s_search_dots, "...");
-    lv_label_set_text(s_search_label, buf);
+    s_search_frame = (uint8_t)((s_search_frame + 1) % SEARCH_FRAME_CNT);
+    snprintf(path, sizeof(path), "/开心/frame-%06d.png", (unsigned)s_search_frame);
+    lv_img_set_src(s_search_img, path);
 }
 
 /* 搜索失败或服务没起来时，不能一直卡在搜索中界面 */
@@ -297,17 +300,25 @@ void music_ui_show_searching(void)
         lv_obj_set_style_radius(s_search_root, 0, LV_PART_MAIN);
         lv_obj_set_style_pad_all(s_search_root, 0, LV_PART_MAIN);
 
+        /* 左右跑动画：表情帧在 emoji 分区的 romfs 里，直接按路径取 */
+        s_search_img = lv_img_create(s_search_root);
+        lv_obj_add_flag(s_search_img, LV_OBJ_FLAG_IGNORE_LAYOUT);
+        lv_obj_set_size(s_search_img, 200, 104);
+        lv_obj_set_pos(s_search_img, (SCREEN_W - 200) / 2, 52);
+        lv_img_set_src(s_search_img, "/开心/frame-000000.png");
+
         s_search_label = lv_label_create(s_search_root);
         lv_obj_add_flag(s_search_label, LV_OBJ_FLAG_IGNORE_LAYOUT);
-        lv_obj_set_size(s_search_label, SCREEN_W, 30);
-        lv_obj_set_pos(s_search_label, 0, (SCREEN_H - 30) / 2);
+        lv_obj_set_size(s_search_label, SCREEN_W, 24);
+        lv_obj_set_pos(s_search_label, 0, 168);
         lv_obj_set_style_text_font(s_search_label, &lv_font_chinese_16, LV_PART_MAIN);
         lv_obj_set_style_text_color(s_search_label, lv_color_white(), LV_PART_MAIN);
         lv_obj_set_style_text_align(s_search_label, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN);
+        lv_label_set_text(s_search_label, "大肥鱼正在努力搜索中……");
     }
 
-    s_search_dots = 0;
-    lv_label_set_text(s_search_label, "本鱼正在努力搜寻");
+    s_search_frame = 0;
+    lv_img_set_src(s_search_img, "/开心/frame-000000.png");
     lv_obj_clear_flag(s_search_root, LV_OBJ_FLAG_HIDDEN);
     lv_obj_move_foreground(s_search_root);
 

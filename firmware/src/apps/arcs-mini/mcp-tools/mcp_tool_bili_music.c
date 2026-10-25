@@ -28,7 +28,7 @@
 #define TAG "mcp_bili"
 
 /* 中转服务的地址。PC 的 WLAN IP，改网络环境时要跟着改。 */
-#define BILI_SERVICE_HOST "10.43.131.195"
+#define BILI_SERVICE_HOST "10.43.131.129"
 #define BILI_SERVICE_PORT 8000
 #define BILI_TIMEOUT_MS   15000
 

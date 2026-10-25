@@ -34,7 +34,20 @@ UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
 REFERER = "https://www.bilibili.com"
 PORT = 8000
 MAX_SECONDS = 600           # 超过 10 分钟的多半是合集/直播回放，转码慢且没意义
-LAN_IP = "10.43.131.195"        # 设备要能访问到的地址，换网络时改这里
+# 设备要能访问到的地址。启动时自动探测（走默认路由的那张网卡），
+# 探测失败才用这个写死的值 —— 换网络/DHCP 重新分配时不用改代码。
+def _detect_lan_ip():
+    import socket
+    sk = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        sk.connect(("8.8.8.8", 80))
+        return sk.getsockname()[0]
+    except Exception:
+        return None
+    finally:
+        sk.close()
+
+LAN_IP = _detect_lan_ip() or "10.43.131.129"
 _stream_cache = {}              # token -> 本地 mp3 路径
 CACHE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "audio_cache")
 os.makedirs(CACHE_DIR, exist_ok=True)

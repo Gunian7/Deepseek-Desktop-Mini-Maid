@@ -114,7 +114,7 @@ notes/                                 # 开发笔记（人设、语音、踩坑
 
 | 依赖 | 说明 |
 |---|---|
-| Arcs-Mini3 开发板 | Chip ID `6d7b101a1f1dcba5`（你的会不同，烧录脚本里要改） |
+| Arcs-Mini3 开发板 | 烧录脚本里的 Chip ID 是示例值 `6d7b101a1f1dcba5`，需替换成你自己的（`adb devices -l` 查看） |
 | USB-C 数据线 | 必须能传数据，不能是充电线 |
 | 小聆AI 账号 | 配网、人设、声音复刻都在小程序里配置 |
 
@@ -132,7 +132,7 @@ notes/                                 # 开发笔记（人设、语音、踩坑
 
 #### 目录布局与 PATH
 
-开发机的实际布局（路径可改，但 `tools/*.ps1` 里的引用要同步）：
+一份可参考的布局（路径可改，但 `tools/*.ps1` 里的引用要同步）：
 
 ```
 F:\Output\Tools\
@@ -191,7 +191,7 @@ cp    ../firmware/res/arcs-mini/emoji.bin res/arcs-mini/
 
 ### 4. 烧录
 
-日常开发只烧 app 分区：
+日常使用只烧 app 分区：
 
 ```powershell
 .\tools\flash-app.ps1
@@ -262,7 +262,7 @@ service 接口
 
 ## 踩过的坑
 
-按类别分组，都写进了 [notes/](notes/) 和技能库。
+下面这些是开发和调试过程中实际遇到的问题，按环节分三类整理，便于对照排查。
 
 ### 播放链路
 
@@ -273,7 +273,7 @@ service 接口
 | 单词能播、带空格的一定失败 | WBI 签名把空格编成 `+`，B 站要 `%20`；`urlencode` 默认给 `+` |
 | 重启后突然连不上服务 | 电脑 DHCP 换了 IP，固件里写死了旧地址 |
 
-### 云端 LLM 行为（最耗时的一类）
+### 云端 LLM 行为
 
 | 现象 | 真正原因 |
 |---|---|
@@ -281,7 +281,7 @@ service 接口
 | 工具描述写「屏幕选择」后她说「设备不支持」 | LLM 读到交互细节，判断设备不具备该能力 |
 | 多个音乐工具并存时她干脆不调 | 收敛成一个入口 |
 | 音乐在放但她同时说「无法播放」 | 端侧接管了点歌，但云端那轮会话没取消——要 pub `VOICE_MSG_CLOUD_SESSION_INTERRUPT` |
-| 同一句话这次调下次不调 | LLM 工具选择本身不稳定，**最终改为端侧拦 ASR，完全不依赖它** |
+| 同一句话这次调下次不调 | LLM 的工具选择本身不稳定；本项目的做法是**端侧直接拦 ASR，不依赖 LLM 决定** |
 
 ### 界面与资源
 
@@ -293,7 +293,7 @@ service 接口
 | 封面消息发不出去 | ebus 的 `pub_async` 用 `platform_malloc` 拷贝 payload，SRAM 已用 99%，8KB 必然 ENOMEM；改传 PSRAM 指针 |
 | 界面整体卡死 | 在 ebus 回调里同步做 HTTP（1~8 秒）堵死事件总线，必须移到 `async_task` 独立线程 |
 | 待机表情变回官方 9 帧 | `emoji.json` 的 `default_emoji` 指向官方的 `neutral`，但分区里只有中文目录，加载失败回退到 app 内置官方表情 |
-| 表情被云端刷回官方 | `user.disable_emoji_update=1` 没设（现已改为固件启动时自动补设） |
+| 表情被云端刷回官方 | `user.disable_emoji_update=1` 未设置（固件启动时会自动补设） |
 | 唤醒词改了不生效 | `user.disable_wakeword_update=1` 挡住了 OTA |
 | 唤醒第一句是男声 | 那不是 TTS，是 `tone` 分区里的本地 `00x_greeting.mp3` |
 | C 源码写中文标点编译失败 | `'。'` 是 multi-character character constant，`-Werror` 直接报错；要按 UTF-8 字节比对 |

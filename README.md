@@ -1,6 +1,6 @@
-# 大肥鱼 · LS26 Arcs-Mini3 桌宠
+# Deepseek Desktop Mini Maid
 
-把 **DeepSeek 鲸鱼娘「大肥鱼」** 做进 **聆思 LS26 / Arcs-Mini3** 这块 1.54 寸圆角屏的小板子里。
+> 内部代号「大肥鱼」——把 **DeepSeek 鲸鱼娘** 做进 **聆思 LS26 / Arcs-Mini3** 这块 1.54 寸圆角屏小板子里的桌面陪伴体。
 
 她会跟着说话的情绪换表情，待机时偷吃白饭，能被点歌——说一句「播放司凤音乐」，屏幕上弹出 5 首候选，单击切换、双击播放，全屏模式还有专辑封面和进度条。
 
@@ -108,10 +108,58 @@ notes/                                 # 开发笔记（人设、语音、踩坑
 
 ### 1. 准备工具链
 
-- Android platform-tools（adb）
-- [nuclei_riscv_newlibc_prebuilt_win64](https://doc.nucleisys.com/) 工具链
-- [listenai-tools](https://cloud.listenai.com/) v0.1.0
-- Python 3 + Pillow + ffmpeg（音乐服务和表情生成用）
+全部在 Windows 上验证过（Windows 11 + git-bash）。
+
+#### 硬件与账号
+
+| 依赖 | 说明 |
+|---|---|
+| Arcs-Mini3 开发板 | Chip ID `6d7b101a1f1dcba5`（你的会不同，烧录脚本里要改） |
+| USB-C 数据线 | 必须能传数据，不能是充电线 |
+| 小聆AI 账号 | 配网、人设、声音复刻都在小程序里配置 |
+
+#### 软件依赖
+
+| 依赖 | 版本 / 来源 | 用途 |
+|---|---|---|
+| [Android platform-tools](https://developer.android.com/tools/releases/platform-tools) | ≥ 1.0.41，提供 `adb` | 烧录、抓日志 |
+| [Nuclei GCC](https://doc.nucleisys.com/nuclei_tools/index.html) | `nuclei_riscv_newlibc_prebuilt_win64_2025.10_slim` | RISC-V 交叉编译 |
+| [listenai-tools](https://cloud.listenai.com/) | v0.1.0 | 聆思打包/烧录工具 |
+| [Git](https://git-scm.com/download/win) | 任意 | 拉 SDK、管版本 |
+| Python | 3.10+（开发用的是 3.14） | 音乐服务、表情生成 |
+| Python 包 | `Pillow` | 表情合成、封面转 ARGB8888 |
+| [ffmpeg](https://ffmpeg.org/download.html#build-windows) | 任意（开发用 Gyan 构建，`winget install Gyan.FFmpeg`） | m4s → MP3 转码 |
+
+#### 目录布局与 PATH
+
+开发机的实际布局（路径可改，但 `tools/*.ps1` 里的引用要同步）：
+
+```
+F:\Output\Tools\
+  platform-tools\            # adb.exe
+  listenai\
+    gcc\                     # nuclei_riscv_newlibc_prebuilt_win64_2025.10_slim
+    ...                      # listenai-tools v0.1.0
+F:\Output\LS26-ArcsMini3\    # 本仓库
+  arcs_mini\                 # clone 下来的官方 SDK
+```
+
+把 `platform-tools` 和 `listenai` 加进 PATH：
+
+```powershell
+$env:PATH = "F:\Output\Tools\platform-tools;" + $env:PATH
+$env:PATH = "F:\Output\Tools\listenai;"     + $env:PATH
+```
+
+> `tools/build-mini3.ps1` 里已写好工具链路径，换位置只需改那一处。
+
+#### Python 依赖安装
+
+```bash
+pip install Pillow
+```
+
+音乐服务只用标准库 + Pillow；`ffmpeg` 需要在 PATH 里能直接调用（`ffmpeg -version` 能跑通即可）。
 
 ### 2. 拉取 SDK 并应用改动
 

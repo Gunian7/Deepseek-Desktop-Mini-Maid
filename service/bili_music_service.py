@@ -49,6 +49,7 @@ def _detect_lan_ip():
 
 LAN_IP = _detect_lan_ip() or "10.43.131.129"
 _stream_cache = {}              # token -> 本地 mp3 路径
+_raw_cache = {}                # token -> B 站 m4s 直链（不转码，验证设备能否直接播）
 CACHE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "audio_cache")
 os.makedirs(CACHE_DIR, exist_ok=True)
 
@@ -390,16 +391,19 @@ class Handler(BaseHTTPRequestHandler):
                     src, bw, cid = audio_url(bvid)
                     local = get_mp3(bvid, src)
                     token = uuid.uuid4().hex[:12]
+                    _raw_cache[token] = src
                     _stream_cache[token] = local
                     print(f"[play-bv] {bvid} {it['title'][:24]} {time.time()-t0:.1f}s", flush=True)
                     token_c = uuid.uuid4().hex[:12]
                     _stream_cache[token_c] = it.get("pic", "")
+                    raw = qs.get("raw", ["0"])[0] == "1"
+                    path = "raw" if raw else "stream"
                     return self._json({
                         "ok": True,
                         "title": it["title"],
                         "author": it["author"],
                         "duration": it["duration"],
-                        "url": f"http://{LAN_IP}:{PORT}/stream/{token}",
+                        "url": f"http://{LAN_IP}:{PORT}/{path}/{token}",
                         "cover": f"http://{LAN_IP}:{PORT}/cover/{token_c}",
                         "bitrate": bw,
                     })
@@ -412,7 +416,7 @@ class Handler(BaseHTTPRequestHandler):
                     return self._json({"ok": False, "error": "no result"}, 404)
                 it = items[0]
                 src, bw, cid = audio_url(it["bvid"])
-                # 转成 mp3 再给设备（m4s 设备不收），本地缓存
+                _raw_cache[token] = src
                 local = get_mp3(it["bvid"], src)
                 token = uuid.uuid4().hex[:12]
                 _stream_cache[token] = local
@@ -455,6 +459,14 @@ class Handler(BaseHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(data)
                 print(f"[cover] sent {len(data)}B", flush=True)
+                return
+
+            if parsed.path.startswith("/raw/"):
+                token_r = parsed.path.rsplit("/", 1)[-1]
+                src = _raw_cache.get(token_r)
+                if not src:
+                    return self._json({"ok": False, "error": "raw token expired"}, 404)
+                self._proxy(src)
                 return
 
             if parsed.path.startswith("/stream/"):

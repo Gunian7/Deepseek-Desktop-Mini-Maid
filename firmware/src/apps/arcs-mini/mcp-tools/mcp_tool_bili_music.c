@@ -453,7 +453,7 @@ static void bili_select_handler(void *unused, uint32_t msg_id, void *data,
 
     LOGI("select %d: %s (%s)", sel->index, g_list.title[sel->index], g_list.bvid[sel->index]);
 
-    snprintf(url, sizeof(url), "http://" BILI_SERVICE_HOST ":%d/play?bv=%s&raw=1",
+    snprintf(url, sizeof(url), "http://" BILI_SERVICE_HOST ":%d/play?bv=%s",
              BILI_SERVICE_PORT, g_list.bvid[sel->index]);
 
     root = bili_get_json(url, RESP_MAX * 2);

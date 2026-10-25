@@ -19,6 +19,7 @@
 #include "lvgl.h"
 #include "voice_player_music.h"
 #include "voice_msg.h"
+#include "emoji_anim.h"
 #include "sys_init.h"
 
 #define TAG "music_ui"
@@ -250,31 +251,12 @@ void music_ui_toggle_mode(void)
 
 /* ==================== 搜索中提示 ==================== */
 
-#define SEARCH_ANIM_MS       90
 #define SEARCH_TIMEOUT_MS    15000
-#define SEARCH_FRAME_CNT     16
 
 static lv_obj_t *s_search_root;
-static lv_obj_t *s_search_img;
+static lv_obj_t *s_search_anim;
 static lv_obj_t *s_search_label;
-static lv_timer_t *s_search_anim;
 static lv_timer_t *s_search_timeout;
-static uint8_t s_search_frame;
-
-/* 左右跑就是「开心」那组：running-right + running-left 拼接，16 帧 */
-static void search_anim_cb(lv_timer_t *timer)
-{
-    char path[64];
-
-    (void)timer;
-
-    if (s_search_img == NULL) {
-        return;
-    }
-    s_search_frame = (uint8_t)((s_search_frame + 1) % SEARCH_FRAME_CNT);
-    snprintf(path, sizeof(path), "/开心/frame-%06d.png", (unsigned)s_search_frame);
-    lv_img_set_src(s_search_img, path);
-}
 
 /* 搜索失败或服务没起来时，不能一直卡在搜索中界面 */
 static void search_timeout_cb(lv_timer_t *timer)
@@ -283,11 +265,16 @@ static void search_timeout_cb(lv_timer_t *timer)
 
     if (s_search_root != NULL) {
         lv_obj_add_flag(s_search_root, LV_OBJ_FLAG_HIDDEN);
+        if (s_search_anim != NULL) {
+            lisa_ui_anim_pause(s_search_anim);
+        }
     }
 }
 
 void music_ui_show_searching(void)
 {
+    const lisa_ui_anim_ext_config_t *cfg;
+
     if (s_search_root == NULL) {
         s_search_root = lv_obj_create(lv_scr_act());
         lv_obj_add_flag(s_search_root, LV_OBJ_FLAG_IGNORE_LAYOUT);
@@ -300,12 +287,14 @@ void music_ui_show_searching(void)
         lv_obj_set_style_radius(s_search_root, 0, LV_PART_MAIN);
         lv_obj_set_style_pad_all(s_search_root, 0, LV_PART_MAIN);
 
-        /* 左右跑动画：表情帧在 emoji 分区的 romfs 里，直接按路径取 */
-        s_search_img = lv_img_create(s_search_root);
-        lv_obj_add_flag(s_search_img, LV_OBJ_FLAG_IGNORE_LAYOUT);
-        lv_obj_set_size(s_search_img, 200, 104);
-        lv_obj_set_pos(s_search_img, (SCREEN_W - 200) / 2, 52);
-        lv_img_set_src(s_search_img, "/开心/frame-000000.png");
+        /* 左右跑动画：直接复用表情分区里「开心」那组帧。
+         * 注意不能用 lv_img_set_src("/开心/frame-xxx.png") —— LVGL 没有注册
+         * 文件系统驱动，表情是靠 romfs_init 读 flash + lv_img_png_src_init
+         * 用数据指针构造 lv_img_dsc_t 的，路径字符串无效。 */
+        s_search_anim = lisa_ui_anim_create(s_search_root);
+        lv_obj_add_flag(s_search_anim, LV_OBJ_FLAG_IGNORE_LAYOUT);
+        lv_obj_set_size(s_search_anim, 200, 104);
+        lv_obj_set_pos(s_search_anim, (SCREEN_W - 200) / 2, 52);
 
         s_search_label = lv_label_create(s_search_root);
         lv_obj_add_flag(s_search_label, LV_OBJ_FLAG_IGNORE_LAYOUT);
@@ -317,18 +306,18 @@ void music_ui_show_searching(void)
         lv_label_set_text(s_search_label, "大肥鱼正在努力搜索中……");
     }
 
-    s_search_frame = 0;
-    lv_img_set_src(s_search_img, "/开心/frame-000000.png");
+    cfg = emoji_anim_get_by_name("开心");
+    if (cfg != NULL) {
+        lisa_ui_anim_set_config(s_search_anim, &cfg->loop);
+        lisa_ui_anim_start(s_search_anim);
+    }
+
     lv_obj_clear_flag(s_search_root, LV_OBJ_FLAG_HIDDEN);
     lv_obj_move_foreground(s_search_root);
 
-    if (s_search_anim == NULL) {
-        s_search_anim = lv_timer_create(search_anim_cb, SEARCH_ANIM_MS, NULL);
-    }
     if (s_search_timeout == NULL) {
         s_search_timeout = lv_timer_create(search_timeout_cb, SEARCH_TIMEOUT_MS, NULL);
     }
-    lv_timer_reset(s_search_anim);
     lv_timer_reset(s_search_timeout);
 }
 
@@ -336,6 +325,9 @@ void music_ui_hide_searching(void)
 {
     if (s_search_root != NULL) {
         lv_obj_add_flag(s_search_root, LV_OBJ_FLAG_HIDDEN);
+        if (s_search_anim != NULL) {
+            lisa_ui_anim_pause(s_search_anim);
+        }
     }
 }
 
